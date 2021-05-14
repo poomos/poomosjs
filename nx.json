@@ -1,5 +1,5 @@
 {
-  "npmScope": "crixus",
+  "npmScope": "poomosjs",
   "affected": {
     "defaultBase": "master"
   },
@@ -12,16 +12,18 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "NmIyNDJiMTktOWMzOS00ZGI1LWFjNmYtY2YwMTE3ODI0NmYyfHJlYWQtd3JpdGU=",
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "ng-formo": {
+      "tags": []
+    }
+  }
 }
