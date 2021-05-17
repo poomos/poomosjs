@@ -39,6 +39,166 @@
           }
         }
       }
+    },
+    "ng-test": {
+      "projectType": "application",
+      "root": "apps/ng-test",
+      "sourceRoot": "apps/ng-test/src",
+      "prefix": "poomosjs",
+      "targets": {
+        "build": {
+          "executor": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/ng-test",
+            "index": "apps/ng-test/src/index.html",
+            "main": "apps/ng-test/src/main.ts",
+            "polyfills": "apps/ng-test/src/polyfills.ts",
+            "tsConfig": "apps/ng-test/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/ng-test/src/favicon.ico",
+              "apps/ng-test/src/assets"
+            ],
+            "styles": [
+              "apps/ng-test/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/ng-test/src/environments/environment.ts",
+                  "with": "apps/ng-test/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ng-test:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ng-test:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "executor": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ng-test:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/ng-test/src/**/*.ts",
+              "apps/ng-test/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/ng-test"
+          ],
+          "options": {
+            "jestConfig": "apps/ng-test/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ng-test-e2e": {
+      "root": "apps/ng-test-e2e",
+      "sourceRoot": "apps/ng-test-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/ng-test-e2e/cypress.json",
+            "tsConfig": "apps/ng-test-e2e/tsconfig.e2e.json",
+            "devServerTarget": "ng-test:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ng-test:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/ng-test-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    },
+    "nest-evento": {
+      "root": "libs/nest-evento",
+      "sourceRoot": "libs/nest-evento/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/nest-evento/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/nest-evento"
+          ],
+          "options": {
+            "jestConfig": "libs/nest-evento/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/libs/nest-evento",
+            "tsConfig": "libs/nest-evento/tsconfig.lib.json",
+            "packageJson": "libs/nest-evento/package.json",
+            "main": "libs/nest-evento/src/index.ts",
+            "assets": [
+              "libs/nest-evento/*.md"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
@@ -48,7 +208,8 @@
     "@nrwl/angular:application": {
       "style": "scss",
       "linter": "eslint",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
     },
     "@nrwl/angular:library": {
       "style": "scss",

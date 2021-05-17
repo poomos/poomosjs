@@ -1,6 +1,5 @@
 import { FormArray, FormGroup, ValidationErrors } from '@angular/forms';
 import * as _ from 'lodash';
-import { FormoRoot, FormValidationError, IFormoParent } from '../index';
 import { FormGroupChild } from '../interfaces/formo-group.interface';
 import {
   FormoGroupConfig,
@@ -8,6 +7,9 @@ import {
   IFormoGroupListeners,
   IFormoGroupValidation
 } from '../interfaces/config/formo-group-config';
+import { FormoRoot } from './formo-root';
+import { IFormoParent } from '../interfaces/formo-parent.interface';
+import { FormValidationError } from '../interfaces/validation/validation-error';
 
 export class FormoGroup<
   TValue extends object,

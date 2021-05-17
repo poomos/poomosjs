@@ -1,11 +1,13 @@
 import { FormArray, ValidationErrors } from '@angular/forms';
-import { FormoRoot, FormValidationError, IFormoParent } from '../index';
 import {
   FormoArrayChildren,
   FormoArrayModel,
   IFormoArrayConfig,
   IFormoArrayListeners
 } from '../interfaces/formo-array.interface';
+import { FormoRoot } from './formo-root';
+import { IFormoParent } from '../interfaces/formo-parent.interface';
+import { FormValidationError } from '../interfaces/validation/validation-error';
 
 export class FormoArray<
   TValue extends Array<any>,

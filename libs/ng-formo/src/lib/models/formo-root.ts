@@ -1,9 +1,9 @@
 import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
-import { FormValidationError } from '../index';
 import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { FormRootChild, IFormoRootListeners } from '../interfaces/formo-root.interface';
+import { FormValidationError } from '../interfaces/validation/validation-error';
 
 export class FormoRoot<
   // eslint-disable-next-line @typescript-eslint/ban-types

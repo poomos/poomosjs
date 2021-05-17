@@ -1,8 +1,10 @@
 import { FormArray, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as _ from 'lodash';
-import { FormoRoot, FormValidationError, IFormoParent } from '../index';
 import { FormoFieldConfig, IFormoFieldConfig } from '../interfaces/config/formo-field-config';
 import { IFormoFieldListeners, IFormoFieldValidation } from '../interfaces/formo-field.interface';
+import { FormoRoot } from './formo-root';
+import { IFormoParent } from '../interfaces/formo-parent.interface';
+import { FormValidationError } from '../interfaces/validation/validation-error';
 
 export class FormoField<
   TValue,

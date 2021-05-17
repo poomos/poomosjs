@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "ng-formo": ["libs/ng-formo/src/index.ts"]
+      "ng-formo": ["libs/ng-formo/src/index.ts"],
+      "nest-evento": ["libs/nest-evento/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

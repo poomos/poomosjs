@@ -24,6 +24,16 @@
   "projects": {
     "ng-formo": {
       "tags": []
+    },
+    "ng-test": {
+      "tags": []
+    },
+    "ng-test-e2e": {
+      "tags": [],
+      "implicitDependencies": ["ng-test"]
+    },
+    "nest-evento": {
+      "tags": []
     }
   }
 }
