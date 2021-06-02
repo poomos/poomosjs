@@ -34,6 +34,9 @@
     },
     "nest-evento": {
       "tags": []
+    },
+    "ng-crudo": {
+      "tags": []
     }
   }
 }

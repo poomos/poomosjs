@@ -199,6 +199,45 @@
           }
         }
       }
+    },
+    "ng-crudo": {
+      "projectType": "library",
+      "root": "libs/ng-crudo",
+      "sourceRoot": "libs/ng-crudo/src",
+      "prefix": "poomosjs",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/ng-crudo/tsconfig.lib.json",
+            "project": "libs/ng-crudo/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/ng-crudo/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/ng-crudo/src/**/*.ts",
+              "libs/ng-crudo/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/ng-crudo"
+          ],
+          "options": {
+            "jestConfig": "libs/ng-crudo/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

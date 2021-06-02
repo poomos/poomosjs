@@ -26,7 +26,9 @@
     "help": "nx help",
     "postinstall": "ngcc --properties es2015 browser module main",
     "publish-nest-evento": "nx build nest-evento && cd dist/libs/nest-evento && npm publish",
-    "publish-ng-formo": "nx build ng-formo --prod && cd dist/libs/ng-formo && npm publish"
+    "publish-ng-formo": "nx build ng-formo --prod && cd dist/libs/ng-formo && npm publish",
+    "publish-ng-crudo": "nx build ng-crudo --prod && cd dist/libs/ng-crudo && npm publish",
+    "barrel-ng-crudo": "barrel-generator --sourceFolder=./libs/ng-crudo/src --barrelFileLocation=./libs/ng-crudo/src --barrelFileName=index.ts --includeFile=.ts --excludeFiles=d.ts,spec.ts,index.ts,test-setup.ts"
   },
   "private": true,
   "dependencies": {
