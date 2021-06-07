@@ -16,8 +16,7 @@ export class FormoRoot<
   listeners: IFormoRootListeners<TValue>;
 
   constructor(
-    children: FormRootChild<TValue>,
-    listeners: IFormoRootListeners<TValue> = {}
+   args: {children: }
   ) {
     this.children = children;
     this.listeners = listeners;

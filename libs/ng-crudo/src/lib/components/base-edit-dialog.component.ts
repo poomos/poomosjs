@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IResource } from '@lebonip/ts-common';
-import { FormoRoot } from '@omidis/ng-formo';
+import { IResource } from '@poomosjs/core';
+import { FormoRoot } from '@poomosjs/ng-formo';
 
 @Component({ template: '' })
 export abstract class CrudoEditComponent<T extends IResource>

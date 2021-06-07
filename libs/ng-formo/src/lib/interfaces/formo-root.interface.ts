@@ -3,7 +3,7 @@ import {
   FormoBooleanType,
   FormoDateType,
   FormoNumberType,
-  FormoStringType
+  FormoStringType,
 } from './formo-field.interface';
 import { FormoRoot } from '../models/formo-root';
 import { FormoArray } from '../models/formo-array';
@@ -78,4 +78,9 @@ export type FormRootChild<TValue extends object> = {
 
 export interface IFormoRootListeners<TValue extends object> {
   formValueChanged?: (root: FormoRoot<TValue>) => void;
+}
+
+export interface IFormoRootArgs<TValue extends object> {
+  children: FormRootChild<TValue>;
+  listeners?: IFormoRootListeners<TValue>;
 }

@@ -37,6 +37,9 @@
     },
     "ng-crudo": {
       "tags": []
+    },
+    "core": {
+      "tags": []
     }
   }
 }

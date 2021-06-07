@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subscription } from 'rxjs';
-import {
-  defaultPoomosTableConfig,
-  ICrudoListBulkAction,
-  ICrudoListItemAction,
-  ICrudoListQuickAction,
-  ICrudoListQuickActionWithOptions,
-  ICrudoTableConfig,
-  ICrudoTableField,
-} from '../models';
 import { SelectionModel } from '@angular/cdk/collections';
-import { defaultCursorInfo, ICursorInfo, IResource } from '@lebonip/ts-common';
+import { ICrudoListQuickAction } from '../models/list';
+import { ICrudoListItemAction } from '../models/list';
+import { ICrudoListBulkAction } from '../models/list';
+import { ICrudoListQuickActionWithOptions } from '../models/list';
+import { ICursorInfo } from '@poomosjs/core';
+import { defaultCursorInfo } from '@poomosjs/core';
+import { ICrudoTableField } from '../models/table';
+import { IResource } from '@poomosjs/core';
+import { ICrudoTableConfig } from '../models/table';
+import { defaultPoomosTableConfig } from '../models/table';
 
 @Component({ template: '' })
 export abstract class CrudoListComponent<T extends IResource>

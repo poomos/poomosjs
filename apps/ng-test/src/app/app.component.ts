@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 
-
 @Component({
   selector: 'poomosjs-root',
   templateUrl: './app.component.html',
@@ -8,4 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ng-test';
+
+  fd =
 }

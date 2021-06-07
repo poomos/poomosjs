@@ -1,5 +1,5 @@
-import { ICursorInfo } from '@lebonip/ts-common';
 import { ICrudoListBulkAction, ICrudoListItemAction } from './list';
+import { ICursorInfo } from '@poomosjs/core';
 
 export enum TableFieldTypes {
   TEXT = 'TEXT',

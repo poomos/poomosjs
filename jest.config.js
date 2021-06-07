@@ -4,5 +4,6 @@ module.exports = {
     '<rootDir>/apps/ng-test',
     '<rootDir>/libs/nest-evento',
     '<rootDir>/libs/ng-crudo',
+    '<rootDir>/libs/core',
   ],
 };
