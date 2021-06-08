@@ -3,18 +3,18 @@ import {
   FormoArrayChildren,
   FormoArrayModel,
   IFormoArrayConfig,
-  IFormoArrayListeners
+  IFormoArrayListeners,
 } from '../interfaces/formo-array.interface';
 import { FormoRoot } from './formo-root';
 import { IFormoParent } from '../interfaces/formo-parent.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
+import { IFormoArrayArgs } from '../interfaces/formo-array.interface';
 
 export class FormoArray<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent,
-  TRootType = TRoot['_type']
+  TParent extends IFormoParent
 > {
   initialControl: FormArray;
   arrayIndex: number;
@@ -30,17 +30,12 @@ export class FormoArray<
     TParent
   >;
 
-  constructor(
-    key: TKey,
-    model: FormoArrayModel<TValue, TRoot, TKey, TParent>,
-    config: FormoArray<TValue, TRoot, TKey, TParent>['config'] = {},
-    listeners: FormoArray<TValue, TRoot, TKey, TParent>['listeners'] = {}
-  ) {
-    this.key = key;
-    this.model = model;
+  constructor(args: IFormoArrayArgs<TValue, TRoot, TKey, TParent>) {
+    this.key = args.key;
+    this.model = args.model;
     this.children = [];
-    this.setConfig(config);
-    this.listeners = listeners;
+    this.setConfig(args.config || {});
+    this.listeners = args.listeners || {};
     this.initialControl = new FormArray([]);
   }
 
@@ -114,7 +109,7 @@ export class FormoArray<
       emitViewToModelChange?: boolean;
     }
   ) {
-    let clone = this.model();
+    const clone = this.model();
     clone.arrayIndex = this.children.length;
     this.children.push(clone);
     clone.onGenerateForm(this.root, this);

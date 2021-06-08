@@ -2,6 +2,8 @@ import { FormoArray } from '../models/formo-array';
 import { FormoRoot } from '../models/formo-root';
 import { FormoGroup } from '../models/formo-group';
 import { IFormoParent } from './formo-parent.interface';
+import { IFormoFieldConfig } from './config/formo-field-config';
+import { FormoField } from '../models/formo-field';
 
 export type FormoArrayModel<
   TValue extends Array<any>,
@@ -44,4 +46,16 @@ export interface IFormoArrayListeners<
   TParent
 > {
   formValueChanged?: (root: TRoot, current: TCurrent) => void;
+}
+
+export interface IFormoArrayArgs<
+  TValue extends Array<any>,
+  TRoot extends FormoRoot<any>,
+  TKey extends string,
+  TParent extends IFormoParent
+> {
+  key: TKey;
+  model: FormoArrayModel<TValue, TRoot, TKey, TParent>;
+  config: FormoArray<TValue, TRoot, TKey, TParent>['config'];
+  listeners: FormoArray<TValue, TRoot, TKey, TParent>['listeners'];
 }

@@ -1,8 +1,8 @@
-import { HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { FormoGroup } from '../models/formo-group';
 import { FormoGroupTypes } from '../interfaces/config/formo-group-config';
 
-
+@Component({ template: '' })
 export abstract class BaseFormoGroupComponent implements OnInit {
   @Input() group: FormoGroup<any, any, any, any>;
   types = FormoGroupTypes;

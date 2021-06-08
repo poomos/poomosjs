@@ -1,6 +1,7 @@
 import { FormoField } from '../models/formo-field';
 import { FormoRoot } from '../models/formo-root';
 import { IFormoParent } from './formo-parent.interface';
+import { IFormoFieldConfig } from './config/formo-field-config';
 
 export enum FormoFieldTypes {
   Text = 'text',
@@ -73,3 +74,15 @@ export type FormoBooleanType<
   TKey extends string,
   TParent extends IFormoParent
 > = FormoField<TValue, TRoot, TKey, TParent>;
+
+export interface IFormoFieldArgs<
+  TValue,
+  TRoot extends FormoRoot<any>,
+  TKey extends string,
+  TParent extends IFormoParent
+> {
+  key: TKey;
+  config: IFormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>>;
+  validation?: FormoField<TValue, TRoot, TKey, TParent>['validation'];
+  listeners?: FormoField<TValue, TRoot, TKey, TParent>['listeners'];
+}

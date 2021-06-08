@@ -6,10 +6,11 @@ import {
   FormoBooleanType,
   FormoDateType,
   FormoNumberType,
-  FormoStringType
+  FormoStringType,
 } from './formo-field.interface';
 import { FormoArray } from '../models/formo-array';
-
+import { FormRootChild } from './formo-root.interface';
+import { IFormoRootListeners } from './formo-root.interface';
 
 export enum FormFieldGroupType {
   GoogleMapAutoComplete = 'google-map-autocomplete',
@@ -80,3 +81,16 @@ export type FormGroupChild<
     ? FormoGroup<TValue[K], TRoot, K extends string ? K : string, TParent>
     : never;
 };
+
+export interface IFormoGroupArgs<
+  TValue extends object,
+  TRoot extends FormoRoot<any>,
+  TKey extends string,
+  TParent extends IFormoParent
+> {
+  key: TKey;
+  children: FormGroupChild<TValue, TRoot, TKey, TParent>;
+  config: FormoGroup<TValue, TRoot, TKey, TParent>['config'];
+  validation: FormoGroup<TValue, TRoot, TKey, TParent>['validation'];
+  listeners: FormoGroup<TValue, TRoot, TKey, TParent>['listeners'];
+}

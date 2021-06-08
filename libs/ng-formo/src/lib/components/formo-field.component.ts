@@ -1,10 +1,16 @@
-import { AfterViewInit, HostBinding, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostBinding,
+  Input,
+  OnInit,
+} from '@angular/core';
 import * as _ from 'lodash';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FormoField } from '../models/formo-field';
 import { FormoFieldTypes } from '../interfaces/formo-field.interface';
 
-
+@Component({ template: '' })
 export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @Input() field: FormoField<any, any, any, any>;
@@ -27,8 +33,7 @@ export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   getErrors() {
     return this.field.control.errors;
@@ -82,5 +87,4 @@ export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
     }
     return value;
   }
-
 }

@@ -5,11 +5,12 @@ import {
   FormoGroupConfig,
   IFormoGroupConfig,
   IFormoGroupListeners,
-  IFormoGroupValidation
+  IFormoGroupValidation,
 } from '../interfaces/config/formo-group-config';
 import { FormoRoot } from './formo-root';
 import { IFormoParent } from '../interfaces/formo-parent.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
+import { IFormoGroupArgs } from '../interfaces/formo-group.interface';
 
 export class FormoGroup<
   TValue extends object,
@@ -34,18 +35,12 @@ export class FormoGroup<
     TParent
   >;
 
-  constructor(
-    key: TKey,
-    children: FormGroupChild<TValue, TRoot, TKey, TParent>,
-    config: FormoGroup<TValue, TRoot, TKey, TParent>['config'] = {},
-    validation: FormoGroup<TValue, TRoot, TKey, TParent>['validation'] = {},
-    listeners: FormoGroup<TValue, TRoot, TKey, TParent>['listeners'] = {}
-  ) {
-    this.key = key;
-    this.children = children;
-    this.setConfig(config);
-    this.listeners = listeners;
-    this.setValidation(validation);
+  constructor(args: IFormoGroupArgs<TValue, TRoot, TKey, TParent>) {
+    this.key = args.key;
+    this.children = args.children;
+    this.setConfig(args.config || {});
+    this.listeners = args.listeners || {};
+    this.setValidation(args.validation || {});
     this.initialControl = new FormGroup({});
   }
 

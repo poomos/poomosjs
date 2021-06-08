@@ -4,9 +4,8 @@ import { FormoField } from '../../models/formo-field';
 import { FormoFieldTypes } from '../formo-field.interface';
 
 export interface IFormoFieldConfig<
-  TRoot extends FormoRoot<any>,
-  C extends FormoField<any, any, string, any>,
-  T = ReturnType<C['value']>
+  TField extends FormoField<any, any, string, any>,
+  T = ReturnType<TField['value']>
 > {
   type?: FormoFieldTypes | string;
   value: T;
@@ -27,11 +26,10 @@ export interface IFormoFieldConfig<
   visible?: boolean;
 }
 export class FormoFieldConfig<
-  TRoot extends FormoRoot<any>,
   TCurrent extends FormoField<any, any, string, any>
 > {
   type?: FormoFieldTypes | string;
-  value: IFormoFieldConfig<TRoot, TCurrent>['value'];
+  value: IFormoFieldConfig<TCurrent>['value'];
   label?: string;
   hideLabel?: boolean;
   icon?: string;
@@ -48,7 +46,7 @@ export class FormoFieldConfig<
   wrapperClass?: string;
   visible?: boolean;
 
-  constructor(config: IFormoFieldConfig<TRoot, TCurrent>) {
+  constructor(config: IFormoFieldConfig<TCurrent>) {
     this.type = config.type || FormoFieldTypes.Text;
     this.panelClass = config.panelClass || 'col-md-6';
     this.wrapperClass = config.wrapperClass || '';

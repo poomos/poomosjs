@@ -1,7 +1,17 @@
-import { FormArray, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import * as _ from 'lodash';
-import { FormoFieldConfig, IFormoFieldConfig } from '../interfaces/config/formo-field-config';
-import { IFormoFieldListeners, IFormoFieldValidation } from '../interfaces/formo-field.interface';
+import { FormoFieldConfig } from '../interfaces/config/formo-field-config';
+import {
+  IFormoFieldListeners,
+  IFormoFieldValidation,
+} from '../interfaces/formo-field.interface';
+import { IFormoFieldArgs } from '../interfaces/formo-field.interface';
 import { FormoRoot } from './formo-root';
 import { IFormoParent } from '../interfaces/formo-parent.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
@@ -10,8 +20,7 @@ export class FormoField<
   TValue,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent,
-  TRootType = TRoot['_type']
+  TParent extends IFormoParent
 > {
   initialControl: FormControl;
   arrayIndex: number;
@@ -19,7 +28,7 @@ export class FormoField<
   root: TRoot;
   parent: TParent;
   key: TKey;
-  config: FormoFieldConfig<TRoot, FormoField<TValue, TRoot, TKey, TParent>>;
+  config: FormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>>;
   listeners: IFormoFieldListeners<
     TRoot,
     FormoField<TValue, TRoot, TKey, TParent>,
@@ -30,16 +39,11 @@ export class FormoField<
     FormoField<TValue, TRoot, TKey, TParent>
   >;
 
-  constructor(
-    key: TKey,
-    config: IFormoFieldConfig<TRoot, FormoField<TValue, TRoot, TKey, TParent>>,
-    validation: FormoField<TValue, TRoot, TKey, TParent>['validation'] = {},
-    listeners: FormoField<TValue, TRoot, TKey, TParent>['listeners'] = {}
-  ) {
-    this.key = key;
-    this.config = new FormoFieldConfig(config);
-    this.listeners = listeners;
-    this.setValidation(validation);
+  constructor(args: IFormoFieldArgs<TValue, TRoot, TKey, TParent>) {
+    this.key = args.key;
+    this.config = new FormoFieldConfig(args.config);
+    this.listeners = args.listeners || {};
+    this.setValidation(args.validation || {});
     this.initialControl = new FormControl({
       value: this.config.value,
       disabled: this.config.isDisabled,
@@ -161,7 +165,7 @@ export class FormoStringField<
   TKey extends string,
   TParent extends IFormoParent,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent, TRootType> {}
+> extends FormoField<TValue, TRoot, TKey, TParent> {}
 
 export class FormoBooleanField<
   TValue extends boolean,
@@ -169,7 +173,7 @@ export class FormoBooleanField<
   TKey extends string,
   TParent extends IFormoParent,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent, TRootType> {}
+> extends FormoField<TValue, TRoot, TKey, TParent> {}
 
 export class FormoArrayField<
   TValue extends Array<any>,
@@ -177,7 +181,7 @@ export class FormoArrayField<
   TKey extends string,
   TParent extends IFormoParent,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent, TRootType> {}
+> extends FormoField<TValue, TRoot, TKey, TParent> {}
 
 export class FormoNumberField<
   TValue extends number,
@@ -185,7 +189,7 @@ export class FormoNumberField<
   TKey extends string,
   TParent extends IFormoParent,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent, TRootType> {}
+> extends FormoField<TValue, TRoot, TKey, TParent> {}
 
 export class FormoDateField<
   TValue extends Date,
@@ -193,4 +197,4 @@ export class FormoDateField<
   TKey extends string,
   TParent extends IFormoParent,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent, TRootType> {}
+> extends FormoField<TValue, TRoot, TKey, TParent> {}

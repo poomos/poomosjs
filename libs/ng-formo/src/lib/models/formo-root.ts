@@ -2,8 +2,12 @@ import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { FormRootChild, IFormoRootListeners } from '../interfaces/formo-root.interface';
+import {
+  FormRootChild,
+  IFormoRootListeners,
+} from '../interfaces/formo-root.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
+import { IFormoRootArgs } from '../interfaces/formo-root.interface';
 
 export class FormoRoot<
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -15,11 +19,9 @@ export class FormoRoot<
   children: FormRootChild<TValue>;
   listeners: IFormoRootListeners<TValue>;
 
-  constructor(
-   args: {children: }
-  ) {
-    this.children = children;
-    this.listeners = listeners;
+  constructor(args: IFormoRootArgs<TValue>) {
+    this.children = args.children;
+    this.listeners = args.listeners || {};
     this.form = new FormGroup({});
   }
 
@@ -76,7 +78,7 @@ export class FormoRoot<
     this.form.setValue(value, options);
   }
 
-  get value() {
+  get value(): TValue {
     return this.form.value;
   }
 
@@ -107,4 +109,3 @@ export class FormoRoot<
     });
   }
 }
-
