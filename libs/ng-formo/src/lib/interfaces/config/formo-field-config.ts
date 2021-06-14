@@ -3,7 +3,7 @@ import { FormoFieldTypes } from '../formo-field.interface';
 
 export interface IFormoFieldConfig<
   TField extends FormoField<any, any, string, any>,
-  T = ReturnType<TField['value']>
+  T = TField['value']
 > {
   type?: FormoFieldTypes | string;
   value: T;

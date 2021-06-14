@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormoFieldTypes, formSchema } from '@poomosjs/ng-formo';
 
 export interface FormationForm {
-  name: string;
+  name: number;
   isModule: boolean;
   hgfjj: { kgl: string }[];
   moduleIds?: string[];
