@@ -6,8 +6,9 @@ import {
   Validators,
 } from '@angular/forms';
 import * as _ from 'lodash';
-import { FormoFieldConfig } from '../interfaces/config/formo-field-config';
+import { IFormoFieldConfig } from '../interfaces/config/formo-field-config';
 import {
+  FormoFieldTypes,
   IFormoFieldListeners,
   IFormoFieldValidation,
 } from '../interfaces/formo-field.interface';
@@ -28,7 +29,25 @@ export class FormoField<
   root: TRoot;
   parent: TParent;
   key: TKey;
-  config: FormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>>;
+  config: IFormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>> = {
+    type: FormoFieldTypes.Text,
+    panelClass: 'col-md-6',
+    wrapperClass: '',
+    isDisabled: false,
+    multiple: false,
+    value: null,
+    label: '',
+    hideLabel: false,
+    compareKeyPath: null,
+    placeholder: '',
+    icon: null,
+    choices: [],
+    choiceLabel: null,
+    choiceValue: null,
+    description: '',
+    labelPath: null,
+    visible: true,
+  };
   listeners: IFormoFieldListeners<
     TRoot,
     FormoField<TValue, TRoot, TKey, TParent>,
@@ -41,7 +60,7 @@ export class FormoField<
 
   constructor(args: IFormoFieldArgs<TValue, TRoot, TKey, TParent>) {
     this.key = args.key;
-    this.config = new FormoFieldConfig(args.config);
+    this.updateConfig(args.config);
     this.listeners = args.listeners || {};
     this.setValidation(args.validation || {});
     this.initialControl = new FormControl({
@@ -62,6 +81,14 @@ export class FormoField<
     this.validation.max = validation.max || 100000;
   }
 
+  updateConfig(
+    config: IFormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>>
+  ) {
+    this.config = {
+      ...this.config,
+      ...config,
+    };
+  }
   get control(): FormControl {
     if (this.parent) {
       if (this.parent.control instanceof FormArray) {

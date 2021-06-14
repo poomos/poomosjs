@@ -23,6 +23,7 @@ export class FormoRoot<
     this.children = args.children;
     this.listeners = args.listeners || {};
     this.form = new FormGroup({});
+    //return new Proxy<this & FormRootChild<TValue>>(this as any, {});
   }
 
   createForm() {

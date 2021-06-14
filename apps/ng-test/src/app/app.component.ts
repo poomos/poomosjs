@@ -39,6 +39,6 @@ export class AppComponent {
   }).generateForm();
 
   constructor() {
-    console.log(this.fd.children.);
+    console.log(this.fd.children);
   }
 }
