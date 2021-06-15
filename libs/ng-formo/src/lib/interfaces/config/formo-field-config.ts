@@ -11,6 +11,7 @@ export interface IFormoFieldConfig<
   hideLabel?: boolean;
   icon?: string;
   description?: string;
+  help?: string;
   compareKeyPath?: string;
   choices?: any[];
   choiceLabel?: string;

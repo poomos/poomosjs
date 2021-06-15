@@ -37,6 +37,7 @@ export class FormoField<
     multiple: false,
     value: null,
     label: '',
+    help: '',
     hideLabel: false,
     compareKeyPath: null,
     placeholder: '',

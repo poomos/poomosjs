@@ -55,7 +55,18 @@ export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
     }
   }
 
-  hasError(validationType: string = null): boolean {
+  get placeholder() {
+    return this.field.config.placeholder;
+  }
+
+  get description() {
+    return this.field.config.description;
+  }
+
+  get help() {
+    return this.field.config.help;
+  }
+  hasError(validationType: string): boolean {
     if (this.getErrors() === {}) {
       return false;
     }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormoFieldTypes, formSchema } from '@poomosjs/ng-formo';
+import { RefDocument } from '@poomosjs/nest-utils/mongoose';
 
 export interface FormationForm {
   name: number;
@@ -13,7 +14,7 @@ export interface FormationForm {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'ng-test';
+  title: RefDocument = 'ng-test';
 
   fd = formSchema<FormationForm>({
     children: {

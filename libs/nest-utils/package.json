@@ -1,0 +1,7 @@
+{
+  "name": "@poomosjs/nest-utils",
+  "version": "0.0.12",
+  "peerDependencies": {
+    "mongoose": "^5.12.13"
+  }
+}
