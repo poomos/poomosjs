@@ -1,10 +1,10 @@
 import * as mongoose from 'mongoose';
 import {
-  FilterQuery,
-  UpdateQuery,
-  DocumentDefinition,
   Document,
+  DocumentDefinition,
+  FilterQuery,
   Model,
+  UpdateQuery,
 } from 'mongoose';
 import { IConnectionPager, ICursorArgs, ICursorInfo } from '@poomosjs/core';
 

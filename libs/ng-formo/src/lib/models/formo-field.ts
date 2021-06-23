@@ -145,7 +145,7 @@ export class FormoField<
   }
 
   setValue(
-    value,
+    value: TValue,
     options?: {
       onlySelf?: boolean;
       emitEvent?: boolean;
@@ -156,7 +156,7 @@ export class FormoField<
     this.control.setValue(value, options);
   }
 
-  patchValue(value) {
+  patchValue(value: Partial<TValue>) {
     this.control.patchValue(value);
   }
 

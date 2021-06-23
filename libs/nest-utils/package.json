@@ -1,7 +1,8 @@
 {
   "name": "@poomosjs/nest-utils",
-  "version": "0.0.12",
+  "version": "0.0.18",
   "peerDependencies": {
-    "mongoose": "^5.12.13"
+    "mongoose": "^5.12.13",
+    "@nestjs/common": "^7.0.0"
   }
 }

@@ -189,6 +189,7 @@
             "{options.outputPath}"
           ],
           "options": {
+            "updateBuildableProjectDepsInPackageJson": false,
             "outputPath": "dist/libs/nest-evento",
             "tsConfig": "libs/nest-evento/tsconfig.lib.json",
             "packageJson": "libs/nest-evento/package.json",
@@ -310,6 +311,8 @@
             "outputPath": "dist/libs/nest-utils",
             "tsConfig": "libs/nest-utils/tsconfig.lib.json",
             "packageJson": "libs/nest-utils/package.json",
+            "buildableProjectDepsInPackageJsonType": "peerDependencies",
+            "updateBuildableProjectDepsInPackageJson": false,
             "main": "libs/nest-utils/src/index.ts",
             "assets": [
               "libs/nest-utils/*.md"

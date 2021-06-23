@@ -1,4 +1,3 @@
-
 export interface IBaseEvent {
-  type: string
+  type: string;
 }

@@ -1,21 +1,23 @@
-
-export class BaseEventModel{
+export class BaseEventModel {
+  readonly busType: 'Event';
   static type;
   readonly type: string;
 
   constructor(...args: any) {}
 }
 
-export function EventModel(event: string): new (... args: any) => BaseEventModel {
-  return class BaseEvent extends BaseEventModel{
+export function EventModel(
+  event: string
+): new (...args: any) => BaseEventModel {
+  return class BaseEvent extends BaseEventModel {
+    readonly busType: 'Event' = 'Event';
     static type = event;
     readonly type: string = event;
 
     constructor(...args: any) {
-      super()
+      super();
     }
   };
-
 }
 export type EventModelType = BaseEventModel;
-export type EventModelClassType = new (... args: any) => BaseEventModel;
+export type EventModelClassType = new (...args: any) => BaseEventModel;
