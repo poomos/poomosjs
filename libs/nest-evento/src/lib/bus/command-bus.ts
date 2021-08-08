@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import 'reflect-metadata';
-import { MessagePublisher } from '../handlers/message-publisher';
-import { ICommandBus } from '../interfaces/commands/command-bus.interface';
-import { ICommandHandlerType } from '../interfaces/commands/command-handler.interface';
-import { ICommandHandler } from '../interfaces/commands/command-handler.interface';
-import { CommandHandlerTypeAndModel } from '../interfaces/commands/command-handler.interface';
-import { CommandModelClassType } from '../interfaces/commands/command.interface';
-import { BaseCommandModel } from '../interfaces/commands/command.interface';
+import { MessageSender } from '../handlers/message-sender';
+import { ICommandBus } from '../interfaces/core/commands/command-bus.interface';
+import { ICommandHandlerType } from '../interfaces/core/commands/command-handler.interface';
+import { ICommandHandler } from '../interfaces/core/commands/command-handler.interface';
+import { CommandModelClassType } from '../interfaces/core/commands/command.interface';
+import { BaseCommandModel } from '../interfaces/core/commands/command.interface';
 import { CommandHandlerNotFoundException } from '../exceptions/command-not-found.exception';
 import { InvalidCommandHandlerException } from '../exceptions/invalid-command-handler.exception';
+import { CommandHandlerTypeAndModel } from '../interfaces/core/handlers-list.interface';
 
 @Injectable()
 export class CommandBus implements ICommandBus {
@@ -18,13 +18,17 @@ export class CommandBus implements ICommandBus {
 
   constructor(
     private readonly moduleRef: ModuleRef,
-    private readonly messagePublisher: MessagePublisher
+    private readonly messagePublisher: MessageSender
   ) {}
 
-  async execute<T extends BaseCommandModel<any>>(
+  async publish<T extends BaseCommandModel<any>>(command: T): Promise<any> {
+    return this.messagePublisher.publish(command);
+  }
+
+  async request<T extends BaseCommandModel<any>>(
     command: T
   ): Promise<T['_resultType']> {
-    return this.messagePublisher.request<T['_resultType']>(command);
+    return this.messagePublisher.request(command);
   }
 
   async localExecute<T extends BaseCommandModel<any>>(

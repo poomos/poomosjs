@@ -1,21 +1,30 @@
 import {
   CrudoTableField,
+  CrudoTableFieldTypes,
   CrudoTableProperties,
 } from '../interfaces/table.interface';
 import {
   CrudoListBulkAction,
   CrudoListItemAction,
 } from '../interfaces/list.interface';
-import { Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Observable } from 'rxjs';
+import { get } from 'lodash';
 
-export class CrudoTableComponent implements CrudoTableProperties<any> {
+@Component({
+  template: '',
+})
+export abstract class CrudoTableComponent implements CrudoTableProperties<any> {
+  tableFieldTypes = CrudoTableFieldTypes;
   @Input()
-  selectionEnabled: boolean;
+  selectionEnabled = true;
   @Input()
-  identifierPath: string;
+  identifierPath = 'id';
   @Input()
-  loading: boolean;
+  resources$: Observable<any[]>;
+  @Input()
+  loading: false;
   @Input()
   itemActions: CrudoListItemAction<any>[];
   @Input()
@@ -26,4 +35,12 @@ export class CrudoTableComponent implements CrudoTableProperties<any> {
   fields: CrudoTableField<any>[];
   @Input()
   selection: SelectionModel<any>;
+
+  getFieldValue(field: CrudoTableField, row: any) {
+    if (field.dynamicDisplay) {
+      return field.dynamicDisplay(get(row, field.property));
+    } else {
+      return get(row, field.property);
+    }
+  }
 }

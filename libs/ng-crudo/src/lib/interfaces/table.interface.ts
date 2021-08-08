@@ -1,8 +1,10 @@
 import { CrudoListBulkAction, CrudoListItemAction } from './list.interface';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Observable } from 'rxjs';
 
 export interface CrudoTableProperties<T> {
   selectionEnabled: boolean;
+  resources$: Observable<any[]>;
   identifierPath: string;
   loading: boolean;
   selection: SelectionModel<T>;

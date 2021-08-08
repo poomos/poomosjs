@@ -1,4 +1,4 @@
-import { Observable, Subscription } from 'rxjs';
+import { isObservable, Observable, of, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CrudoTableField,
@@ -16,7 +16,9 @@ interface ListComponentOptions {
   routeNewParams?: string[];
 }
 
-@Component({})
+@Component({
+  template: '',
+})
 export abstract class CrudoListComponent<R>
   implements OnDestroy, OnInit, CrudoTableProperties<R> {
   options: ListComponentOptions = {
@@ -25,11 +27,10 @@ export abstract class CrudoListComponent<R>
     routeNewParams: ['create', 'new'],
   };
   subscriptions: Subscription = new Subscription();
-  resources: R[];
-  resources$: Observable<R[]>;
+  protected dataSource$: Observable<R[]>;
   resourcesId: string | number = null;
 
-  selectionEnabled: boolean;
+  selectionEnabled = true;
   identifierPath: string;
   loading: boolean;
 
@@ -43,6 +44,21 @@ export abstract class CrudoListComponent<R>
 
   ngOnInit() {}
 
+  get resources$(): Observable<R[]> {
+    return this.dataSource$;
+  }
+
+  setResources(resources: R[] | Observable<R[]>) {
+    if (isObservable(resources)) {
+      this.dataSource$ = resources;
+    } else {
+      this.dataSource$ = of(resources);
+    }
+  }
+
+  addField(field: CrudoTableField) {
+    this.fields.push(field);
+  }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

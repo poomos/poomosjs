@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { QUERY_HANDLER_METADATA } from './constants';
-import { QueryModelClassType } from '../interfaces/queries/query.interface';
+import { QueryModelClassType } from '../interfaces/core/queries/query.interface';
 
 export const QueryHandler = (query: QueryModelClassType): ClassDecorator => {
   return (target: object) => {

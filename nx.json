@@ -1,8 +1,4 @@
 {
-  "npmScope": "poomosjs",
-  "affected": {
-    "defaultBase": "master"
-  },
   "implicitDependencies": {
     "package.json": {
       "dependencies": "*",
@@ -10,6 +6,10 @@
     },
     ".eslintrc.json": "*"
   },
+  "affected": {
+    "defaultBase": "master"
+  },
+  "npmScope": "poomosjs",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
@@ -42,6 +42,12 @@
       "tags": []
     },
     "nest-utils": {
+      "tags": []
+    },
+    "app-test": {
+      "tags": []
+    },
+    "pub-sub-emulator": {
       "tags": []
     }
   }

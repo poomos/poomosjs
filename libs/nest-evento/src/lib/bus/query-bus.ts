@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import 'reflect-metadata';
-import { MessagePublisher } from '../handlers/message-publisher';
-import { IQueryBus } from '../interfaces/queries/query-bus.interface';
-import { IQueryHandlerType } from '../interfaces/queries/query-handler.interface';
-import { IQueryHandler } from '../interfaces/queries/query-handler.interface';
-import { QueryHandlerTypeAndModel } from '../interfaces/queries/query-handler.interface';
-import { QueryModelType } from '../interfaces/queries/query.interface';
+import { MessageSender } from '../handlers/message-sender';
+import { IQueryBus } from '../interfaces/core/queries/query-bus.interface';
+import { IQueryHandlerType } from '../interfaces/core/queries/query-handler.interface';
+import { IQueryHandler } from '../interfaces/core/queries/query-handler.interface';
+import { QueryModelType } from '../interfaces/core/queries/query.interface';
 import { QueryHandlerNotFoundException } from '../exceptions/query-not-found.exception';
 import { InvalidQueryHandlerException } from '../exceptions/invalid-query-handler.exception';
+import { QueryHandlerTypeAndModel } from '../interfaces/core/handlers-list.interface';
 
 @Injectable()
 export class QueryBus implements IQueryBus {
@@ -16,10 +16,10 @@ export class QueryBus implements IQueryBus {
 
   constructor(
     private readonly moduleRef: ModuleRef,
-    private readonly messagePublisher: MessagePublisher
+    private readonly messagePublisher: MessageSender
   ) {}
 
-  async execute<T extends QueryModelType>(query: T): Promise<T['_resultType']> {
+  async request<T extends QueryModelType>(query: T): Promise<T['_resultType']> {
     return this.messagePublisher.request<T['_resultType']>(query);
   }
 

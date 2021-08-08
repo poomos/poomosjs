@@ -10,7 +10,9 @@ interface CrudoEditComponentOptions {
   loadResource?: boolean;
 }
 
-@Component({})
+@Component({
+  template: '',
+})
 export abstract class CrudoEditComponent<R> implements OnDestroy, OnInit {
   form: FormoRoot<any>;
   options: CrudoEditComponentOptions = {

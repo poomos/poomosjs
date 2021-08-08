@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { EVENT_HANDLER_METADATA } from './constants';
-import { EventModelClassType } from '../interfaces/events/event.interface';
+import { EventModelClassType } from '../interfaces/core/events/event.interface';
 
 export const EventHandler = (event: EventModelClassType): ClassDecorator => {
   return (target: object) => {

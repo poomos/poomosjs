@@ -6,5 +6,7 @@ module.exports = {
     '<rootDir>/libs/ng-crudo',
     '<rootDir>/libs/core',
     '<rootDir>/libs/nest-utils',
+    '<rootDir>/apps/app-test',
+    '<rootDir>/libs/pub-sub-emulator',
   ],
 };

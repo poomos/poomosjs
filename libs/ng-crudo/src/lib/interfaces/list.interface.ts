@@ -1,7 +1,7 @@
 export interface CrudoListItemAction<T> {
   action: (item: T) => any;
   name: string;
-  icon: string;
+  icon?: string;
 }
 
 export interface CrudoListBulkAction<T> {

@@ -1,5 +1,25 @@
 {
   "version": 2,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "ng-formo",
+  "generators": {
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
   "projects": {
     "ng-formo": {
       "projectType": "library",
@@ -30,9 +50,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/ng-formo"
-          ],
+          "outputs": ["coverage/libs/ng-formo"],
           "options": {
             "jestConfig": "libs/ng-formo/jest.config.js",
             "passWithNoTests": true
@@ -59,9 +77,7 @@
               "apps/ng-test/src/favicon.ico",
               "apps/ng-test/src/assets"
             ],
-            "styles": [
-              "apps/ng-test/src/styles.scss"
-            ],
+            "styles": ["apps/ng-test/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -122,9 +138,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/ng-test"
-          ],
+          "outputs": ["coverage/apps/ng-test"],
           "options": {
             "jestConfig": "apps/ng-test/jest.config.js",
             "passWithNoTests": true
@@ -153,9 +167,7 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/ng-test-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/ng-test-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -168,16 +180,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/nest-evento/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/nest-evento/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/nest-evento"
-          ],
+          "outputs": ["coverage/libs/nest-evento"],
           "options": {
             "jestConfig": "libs/nest-evento/jest.config.js",
             "passWithNoTests": true
@@ -185,18 +193,14 @@
         },
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "updateBuildableProjectDepsInPackageJson": false,
             "outputPath": "dist/libs/nest-evento",
             "tsConfig": "libs/nest-evento/tsconfig.lib.json",
             "packageJson": "libs/nest-evento/package.json",
             "main": "libs/nest-evento/src/index.ts",
-            "assets": [
-              "libs/nest-evento/*.md"
-            ]
+            "assets": ["libs/nest-evento/*.md"]
           }
         }
       }
@@ -210,6 +214,7 @@
         "build": {
           "executor": "@nrwl/angular:package",
           "options": {
+            "updateBuildableProjectDepsInPackageJson": false,
             "tsConfig": "libs/ng-crudo/tsconfig.lib.json",
             "project": "libs/ng-crudo/ng-package.json"
           },
@@ -230,9 +235,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/ng-crudo"
-          ],
+          "outputs": ["coverage/libs/ng-crudo"],
           "options": {
             "jestConfig": "libs/ng-crudo/jest.config.js",
             "passWithNoTests": true
@@ -269,9 +272,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/core"
-          ],
+          "outputs": ["coverage/libs/core"],
           "options": {
             "jestConfig": "libs/core/jest.config.js",
             "passWithNoTests": true
@@ -287,16 +288,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/nest-utils/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/nest-utils/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/nest-utils"
-          ],
+          "outputs": ["coverage/libs/nest-utils"],
           "options": {
             "jestConfig": "libs/nest-utils/jest.config.js",
             "passWithNoTests": true
@@ -304,9 +301,7 @@
         },
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/nest-utils",
             "tsConfig": "libs/nest-utils/tsconfig.lib.json",
@@ -314,32 +309,92 @@
             "buildableProjectDepsInPackageJsonType": "peerDependencies",
             "updateBuildableProjectDepsInPackageJson": false,
             "main": "libs/nest-utils/src/index.ts",
-            "assets": [
-              "libs/nest-utils/*.md"
-            ]
+            "assets": ["libs/nest-utils/*.md"]
+          }
+        }
+      }
+    },
+    "app-test": {
+      "root": "apps/app-test",
+      "sourceRoot": "apps/app-test/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/app-test",
+            "main": "apps/app-test/src/main.ts",
+            "tsConfig": "apps/app-test/tsconfig.app.json",
+            "assets": ["apps/app-test/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/app-test/src/environments/environment.ts",
+                  "with": "apps/app-test/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "app-test:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/app-test/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/app-test"],
+          "options": {
+            "jestConfig": "apps/app-test/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "pub-sub-emulator": {
+      "root": "libs/pub-sub-emulator",
+      "sourceRoot": "libs/pub-sub-emulator/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/pub-sub-emulator",
+            "tsConfig": "libs/pub-sub-emulator/tsconfig.lib.json",
+            "packageJson": "libs/pub-sub-emulator/package.json",
+            "main": "libs/pub-sub-emulator/src/index.ts",
+            "assets": ["libs/pub-sub-emulator/*.md"]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/pub-sub-emulator/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/pub-sub-emulator"],
+          "options": {
+            "jestConfig": "libs/pub-sub-emulator/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
     }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
-  "generators": {
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    }
-  },
-  "defaultProject": "ng-formo"
+  }
 }

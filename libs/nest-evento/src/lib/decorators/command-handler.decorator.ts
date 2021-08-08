@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { COMMAND_HANDLER_METADATA } from './constants';
-import { CommandModelClassType } from '../interfaces/commands/command.interface';
+import { CommandModelClassType } from '../interfaces/core/commands/command.interface';
 
 export const CommandHandler = (
   command: CommandModelClassType

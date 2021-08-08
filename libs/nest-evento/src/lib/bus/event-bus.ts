@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { MessagePublisher } from '../handlers/message-publisher';
-import { IEventBus } from '../interfaces/events/event-bus.interface';
-import { IEventHandlerType } from '../interfaces/events/event-handler.interface';
-import { IEventHandler } from '../interfaces/events/event-handler.interface';
-import { EventHandlerTypeAndModel } from '../interfaces/events/event-handler.interface';
-import { EventModelType } from '../interfaces/events/event.interface';
+import { MessageSender } from '../handlers/message-sender';
+import { IEventBus } from '../interfaces/core/events/event-bus.interface';
+import { IEventHandlerType } from '../interfaces/core/events/event-handler.interface';
+import { IEventHandler } from '../interfaces/core/events/event-handler.interface';
+import { EventModelType } from '../interfaces/core/events/event.interface';
 import { InvalidEventHandlerException } from '../exceptions/invalid-events-handler.exception';
+import { EventHandlerTypeAndModel } from '../interfaces/core/handlers-list.interface';
 
 @Injectable()
 export class EventBus implements IEventBus {
@@ -14,7 +14,7 @@ export class EventBus implements IEventBus {
 
   constructor(
     private readonly moduleRef: ModuleRef,
-    private readonly messagePublisher: MessagePublisher
+    private readonly messagePublisher: MessageSender
   ) {}
 
   publish<T extends EventModelType = EventModelType>(event: T) {

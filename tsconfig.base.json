@@ -19,7 +19,8 @@
       "@poomosjs/nest-evento": ["libs/nest-evento/src/index.ts"],
       "@poomosjs/ng-crudo": ["libs/ng-crudo/src/index.ts"],
       "@poomosjs/core": ["libs/core/src/index.ts"],
-      "@poomosjs/nest-utils": ["libs/nest-utils/src/index.ts"]
+      "@poomosjs/nest-utils": ["libs/nest-utils/src/index.ts"],
+      "@poomosjs/pub-sub-emulator": ["libs/pub-sub-emulator/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

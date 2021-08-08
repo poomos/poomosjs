@@ -1,17 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { isBaseEvent } from '../utils/kafka-event.utils';
 import { CommandBus } from '../bus/command-bus';
 import { QueryBus } from '../bus/query-bus';
 import { EventBus } from '../bus/event-bus';
-import { IBaseEvent } from '../interfaces/base-event.interface';
-import { ICommandHandler } from '../interfaces/commands/command-handler.interface';
-import { CommandModelType } from '../interfaces/commands/command.interface';
-import { QueryModelType } from '../interfaces/queries/query.interface';
-import { IQueryHandler } from '../interfaces/queries/query-handler.interface';
-import { IEventHandler } from '../interfaces/events/event-handler.interface';
-import { EventModelType } from '../interfaces/events/event.interface';
+import { IBaseEvent } from '../interfaces/core/base-event.interface';
+import { ICommandHandler } from '../interfaces/core/commands/command-handler.interface';
+import { CommandModelType } from '../interfaces/core/commands/command.interface';
+import { QueryModelType } from '../interfaces/core/queries/query.interface';
+import { IQueryHandler } from '../interfaces/core/queries/query-handler.interface';
+import { IEventHandler } from '../interfaces/core/events/event-handler.interface';
+import { EventModelType } from '../interfaces/core/events/event.interface';
 
 @Injectable()
 export class MessageHandler {
@@ -24,7 +24,8 @@ export class MessageHandler {
     protected readonly eventBus: EventBus
   ) {}
 
-  async onRequest(value: any, replier: (data: any) => Promise<any>) {
+  async onRequest(value: any) {
+    console.log(value);
     if (isBaseEvent(value)) {
       const handlerObj = this.findHandler(value);
       if (handlerObj && handlerObj.handlerType === 'query') {
@@ -34,7 +35,7 @@ export class MessageHandler {
         if (errors.length > 0) {
         } else {
           const result = await handlerObj.handler.handle(event);
-          await replier(result);
+          return result;
         }
       }
       if (handlerObj && handlerObj.handlerType === 'command') {
@@ -44,13 +45,14 @@ export class MessageHandler {
         if (errors.length > 0) {
         } else {
           const result = await handlerObj.handler.handle(event);
-          await replier(result);
+          return result;
         }
       }
     }
+    throw new HttpException('Not found handler', 500);
   }
 
-  async onDispatch(value: any) {
+  async onSubscription(value: any) {
     if (isBaseEvent(value)) {
       const handlerObj = this.findHandler(value);
       if (handlerObj && handlerObj.handlerType === 'event') {
@@ -59,7 +61,7 @@ export class MessageHandler {
         const errors = await validate(event);
         if (errors.length > 0) {
         } else {
-          handlerObj.handler.handle(event);
+          await handlerObj.handler.handle(event);
         }
       }
       if (handlerObj && handlerObj.handlerType === 'command') {
@@ -68,7 +70,7 @@ export class MessageHandler {
         const errors = await validate(event);
         if (errors.length > 0) {
         } else {
-          handlerObj.handler.handle(event);
+          await handlerObj.handler.handle(event);
         }
       }
     }
