@@ -8,7 +8,7 @@ export class BaseQueryModel<R> {
 }
 
 export function QueryModel<R = void>(
-  event: string & (R extends void ? 'No type parameter was supplied' : string),
+  event: string,
   target?: string
 ): new (...args: any) => BaseQueryModel<R> {
   return class BaseQuery extends BaseQueryModel<R> {

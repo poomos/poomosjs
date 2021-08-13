@@ -29,6 +29,7 @@
     "publish-nest-utils": "nx build nest-utils && cd dist/libs/nest-utils && npm publish --access=public",
     "publish-ng-formo": "nx build ng-formo --prod && cd dist/libs/ng-formo && npm publish --access=public",
     "publish-ng-crudo": "nx build ng-crudo --prod && cd dist/libs/ng-crudo && npm publish --access=public",
+    "publish-pub-sub": "nx build pub-sub-emulator  && cd dist/libs/pub-sub-emulator && npm publish --access=public",
     "publish-core": "nx build core --prod && cd dist/libs/core && npm publish --access=public",
     "barrel-ng-crudo": "barrel-generator --sourceFolder=./libs/ng-crudo/src --barrelFileLocation=./libs/ng-crudo/src --barrelFileName=index.ts --includeFile=.ts --excludeFiles=d.ts,spec.ts,index.ts",
     "barrel-ng-formo": "barrel-generator --sourceFolder=./libs/ng-formo/src --barrelFileLocation=./libs/ng-formo/src --barrelFileName=index.ts --includeFile=.ts --excludeFiles=d.ts,spec.ts,index.ts",

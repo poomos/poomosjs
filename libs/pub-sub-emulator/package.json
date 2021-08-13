@@ -1,7 +1,7 @@
 {
   "name": "@poomosjs/pub-sub-emulator",
-  "version": "0.0.1",
+  "version": "0.0.21",
   "bin": {
-    "pub-sub-emulator": "./bin/emulator.js"
+    "pub-sub-emulator": "./src/bin/emulator.js"
   }
 }

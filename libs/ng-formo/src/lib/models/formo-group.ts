@@ -11,13 +11,14 @@ import { FormoRoot } from './formo-root';
 import { IFormoParent } from '../interfaces/formo-parent.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
 import { IFormoGroupArgs } from '../interfaces/formo-group.interface';
+import { FormoBaseWrapper } from './formo-base-wrapper';
 
 export class FormoGroup<
   TValue extends object,
   TRoot extends FormoRoot<any>,
   TKey extends string,
   TParent extends IFormoParent
-> {
+> extends FormoBaseWrapper {
   initialControl: FormGroup;
   arrayIndex: number;
   root: TRoot;
@@ -36,6 +37,7 @@ export class FormoGroup<
   >;
 
   constructor(args: IFormoGroupArgs<TValue, TRoot, TKey, TParent>) {
+    super();
     this.key = args.key;
     this.children = args.children;
     this.setConfig(args.config || {});

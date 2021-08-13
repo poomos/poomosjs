@@ -30,18 +30,6 @@ export abstract class BaseFormoArrayComponent implements OnInit {
     }
   }
 
-  getControl() {
-    //return this.formFieldsService.getAbstractControlByPath(this.form, this.path) as FormArray;
-  }
-
-  getControls() {
-    // return this.getControl().controls;
-  }
-
-  isValid() {
-    //return (this.getControl().valid && (this.getControl().dirty || this.getControl().touched))
-  }
-
   addModel() {
     /*    const  model = (this.baseFormField.getChildbyPath(this.path) as FormFieldArray).model;
     const  modelForm = this.formFieldsService.convertFormFieldsToAbstractControl(model);

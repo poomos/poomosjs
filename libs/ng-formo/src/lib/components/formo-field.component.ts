@@ -44,7 +44,7 @@ export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
   }
 
   isValid() {
-    return this.field.control.valid;
+    return this.field.valid;
   }
 
   get label() {

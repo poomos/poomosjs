@@ -12,6 +12,8 @@ export * from './lib/interfaces/validation/validation-error';
 export * from './lib/models/formo-array';
 export * from './lib/models/formo-group';
 export * from './lib/models/formo-root';
+export * from './lib/models/formo-field';
+export * from './lib/models/formo-base-wrapper';
 export * from './lib/ng-formo.module';
 export * from './lib/schemas/form-creator';
 export * from './lib/schemas/formo-array.schema';

@@ -8,11 +8,12 @@ import {
 } from '../interfaces/formo-root.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
 import { IFormoRootArgs } from '../interfaces/formo-root.interface';
+import { FormoBaseWrapper } from './formo-base-wrapper';
 
 export class FormoRoot<
   // eslint-disable-next-line @typescript-eslint/ban-types
   TValue extends object
-> {
+> extends FormoBaseWrapper {
   subscriptions: Subscription = new Subscription();
   readonly _type: TValue;
   form: FormGroup;
@@ -20,6 +21,7 @@ export class FormoRoot<
   listeners: IFormoRootListeners<TValue>;
 
   constructor(args: IFormoRootArgs<TValue>) {
+    super();
     this.children = args.children;
     this.listeners = args.listeners || {};
     this.form = new FormGroup({});
@@ -46,7 +48,7 @@ export class FormoRoot<
     });
   }
 
-  get control() {
+  get control(): FormGroup {
     return this.form;
   }
   prepareForValue(value) {
@@ -81,10 +83,6 @@ export class FormoRoot<
 
   get value(): TValue {
     return this.form.value;
-  }
-
-  isValid() {
-    return this.form.valid;
   }
 
   getChildByKey(key: string | number) {

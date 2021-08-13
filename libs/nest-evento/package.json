@@ -1,6 +1,6 @@
 {
   "name": "@poomosjs/nest-evento",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "peerDependencies": {
     "@nestjs/core": "^7.0.0",
     "reflect-metadata": "^0.1.13",

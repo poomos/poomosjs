@@ -2,7 +2,7 @@ import { FormoRootSchema } from './formo-root.schema';
 import { FormoRoot } from '../models/formo-root';
 import { createFormFromSchema } from './form-creator';
 
-export const formSchema = <TValue extends object>(
+export const createFormSchema = <TValue extends object>(
   schema: FormoRootSchema<TValue>
 ): FormSchema<TValue> => {
   return new FormSchema<TValue>(schema);

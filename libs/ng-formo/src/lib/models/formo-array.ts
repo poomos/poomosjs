@@ -9,13 +9,14 @@ import { FormoRoot } from './formo-root';
 import { IFormoParent } from '../interfaces/formo-parent.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
 import { IFormoArrayArgs } from '../interfaces/formo-array.interface';
+import { FormoBaseWrapper } from './formo-base-wrapper';
 
 export class FormoArray<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
   TParent extends IFormoParent
-> {
+> extends FormoBaseWrapper {
   initialControl: FormArray;
   arrayIndex: number;
   root: TRoot;
@@ -31,6 +32,7 @@ export class FormoArray<
   >;
 
   constructor(args: IFormoArrayArgs<TValue, TRoot, TKey, TParent>) {
+    super();
     this.key = args.key;
     this.model = args.model;
     this.children = [];

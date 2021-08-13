@@ -24,7 +24,7 @@ console.log(greeting);
 
 try {
   const fileContents = fs.readFileSync(
-    `${options.configFile || 'data-multi.yaml'}!`,
+    `${options.configFile || 'pub-sub-emulator.yaml'}`,
     'utf8'
   );
   const data = yaml.load(fileContents);

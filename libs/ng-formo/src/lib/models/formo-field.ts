@@ -16,13 +16,14 @@ import { IFormoFieldArgs } from '../interfaces/formo-field.interface';
 import { FormoRoot } from './formo-root';
 import { IFormoParent } from '../interfaces/formo-parent.interface';
 import { FormValidationError } from '../interfaces/validation/validation-error';
+import { FormoBaseWrapper } from './formo-base-wrapper';
 
 export class FormoField<
   TValue,
   TRoot extends FormoRoot<any>,
   TKey extends string,
   TParent extends IFormoParent
-> {
+> extends FormoBaseWrapper {
   initialControl: FormControl;
   arrayIndex: number;
   absolutePath: string;
@@ -60,6 +61,7 @@ export class FormoField<
   >;
 
   constructor(args: IFormoFieldArgs<TValue, TRoot, TKey, TParent>) {
+    super();
     this.key = args.key;
     this.updateConfig(args.config);
     this.listeners = args.listeners || {};
