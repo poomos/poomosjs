@@ -1,15 +1,14 @@
-import { FormoArray } from '../models/formo-array';
-import { FormoRoot } from '../models/formo-root';
-import { FormoGroup } from '../models/formo-group';
-import { IFormoParent } from './formo-parent.interface';
-import { IFormoFieldConfig } from './config/formo-field-config';
-import { FormoField } from '../models/formo-field';
+import { FormoArray } from './formo-array';
+import { FormoRoot } from '../root/formo-root';
+import { FormoGroup } from '../group/formo-group';
+import { FormoCanBeParent } from '../base/formo-base-wrapper';
+import { FormoObject } from '../shared/utils.interface';
 
 export type FormoArrayModel<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > = () => TValue[0] extends Array<any>
   ? FormoArray<
       TValue[0],
@@ -17,7 +16,7 @@ export type FormoArrayModel<
       string,
       FormoArray<TValue, TRoot, TKey, TParent>
     >
-  : TValue[0] extends object
+  : TValue[0] extends FormoObject
   ? FormoGroup<
       TValue[0],
       TRoot,
@@ -30,7 +29,7 @@ export type FormoArrayChildren<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > = ReturnType<FormoArrayModel<TValue, TRoot, TKey, TParent>>[];
 
 export interface IFormoArrayConfig<
@@ -52,7 +51,7 @@ export interface IFormoArrayArgs<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > {
   key: TKey;
   model: FormoArrayModel<TValue, TRoot, TKey, TParent>;

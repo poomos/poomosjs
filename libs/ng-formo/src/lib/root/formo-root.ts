@@ -2,18 +2,16 @@ import { FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
+import { FormoBaseWrapper } from '../base/formo-base-wrapper';
 import {
   FormRootChild,
+  IFormoRootArgs,
   IFormoRootListeners,
-} from '../interfaces/formo-root.interface';
-import { FormValidationError } from '../interfaces/validation/validation-error';
-import { IFormoRootArgs } from '../interfaces/formo-root.interface';
-import { FormoBaseWrapper } from './formo-base-wrapper';
+} from './formo-root.type';
+import { FormValidationError } from '../base/validation-error';
+import { FormoObject } from '../shared/utils.interface';
 
-export class FormoRoot<
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  TValue extends object
-> extends FormoBaseWrapper {
+export class FormoRoot<TValue extends FormoObject> extends FormoBaseWrapper {
   subscriptions: Subscription = new Subscription();
   readonly _type: TValue;
   form: FormGroup;
@@ -25,7 +23,6 @@ export class FormoRoot<
     this.children = args.children;
     this.listeners = args.listeners || {};
     this.form = new FormGroup({});
-    //return new Proxy<this & FormRootChild<TValue>>(this as any, {});
   }
 
   createForm() {
@@ -69,7 +66,7 @@ export class FormoRoot<
     this.form.patchValue(value);
   }
   setValue(
-    value,
+    value: TValue,
     options?: {
       onlySelf?: boolean;
       emitEvent?: boolean;
@@ -104,7 +101,7 @@ export class FormoRoot<
   close() {
     this.subscriptions.unsubscribe();
     Object.keys(this.children).forEach((key) => {
-      this.children[key].close();
+      //   this.children[key].close();
     });
   }
 }

@@ -1,5 +1,5 @@
-import { FormoField } from '../../models/formo-field';
-import { FormoFieldTypes } from '../formo-field.interface';
+import { FormoField } from './formo-field';
+import { FormoFieldTypes } from './formo-field.type';
 
 export interface IFormoFieldConfig<
   TField extends FormoField<any, any, string, any>,

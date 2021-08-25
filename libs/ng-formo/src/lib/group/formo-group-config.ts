@@ -1,5 +1,5 @@
-import { FormoRoot } from '../../models/formo-root';
-import { FormoGroup } from '../../models/formo-group';
+import { FormoRoot } from '../root/formo-root';
+import { FormoGroup } from './formo-group';
 
 export enum FormoGroupTypes {
   Classic = 'Classic',

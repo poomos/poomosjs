@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import * as _ from 'lodash';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormoField } from '../models/formo-field';
-import { FormoFieldTypes } from '../interfaces/formo-field.interface';
+import { FormoField } from '../field/formo-field';
+import { FormoFieldTypes } from '../field/formo-field.type';
 
 @Component({ template: '' })
 export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {

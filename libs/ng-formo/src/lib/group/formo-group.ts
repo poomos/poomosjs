@@ -1,24 +1,31 @@
 import { FormArray, FormGroup, ValidationErrors } from '@angular/forms';
 import * as _ from 'lodash';
-import { FormGroupChild } from '../interfaces/formo-group.interface';
+
+import { FormoRoot } from '../root/formo-root';
+import {
+  FormoBaseWrapper,
+  FormoCanBeParent,
+  IFormoBaseChild,
+} from '../base/formo-base-wrapper';
+import { FormGroupChild, IFormoGroupArgs } from './formo-group.type';
+import { FormValidationError } from '../base/validation-error';
 import {
   FormoGroupConfig,
   IFormoGroupConfig,
   IFormoGroupListeners,
   IFormoGroupValidation,
-} from '../interfaces/config/formo-group-config';
-import { FormoRoot } from './formo-root';
-import { IFormoParent } from '../interfaces/formo-parent.interface';
-import { FormValidationError } from '../interfaces/validation/validation-error';
-import { IFormoGroupArgs } from '../interfaces/formo-group.interface';
-import { FormoBaseWrapper } from './formo-base-wrapper';
+} from './formo-group-config';
+import { FormoObject } from '../shared/utils.interface';
 
 export class FormoGroup<
-  TValue extends object,
-  TRoot extends FormoRoot<any>,
-  TKey extends string,
-  TParent extends IFormoParent
-> extends FormoBaseWrapper {
+    TValue extends FormoObject,
+    TRoot extends FormoRoot<any>,
+    TKey extends string,
+    TParent extends FormoCanBeParent
+  >
+  extends FormoBaseWrapper
+  implements IFormoBaseChild<TRoot, TParent>
+{
   initialControl: FormGroup;
   arrayIndex: number;
   root: TRoot;
@@ -96,7 +103,7 @@ export class FormoGroup<
     this.parent = parent;
     this.root = root;
     Object.keys(this.children).forEach((key) => {
-      this.children[key].setRootAndParent(root, this);
+      return this.children[key].setRootAndParent(root, this);
     });
   }
 

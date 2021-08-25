@@ -1,83 +1,72 @@
-import { IFormoFieldConfig } from '../interfaces/config/formo-field-config';
-import { FormoField } from '../models/formo-field';
-import { FormoRootSchema } from './formo-root.schema';
+import { FormoField } from './formo-field';
 import {
-  FormoParentFromSchema,
-  FormoParentSchema,
-} from './formo-parent.schema';
-import { FormoRootFromSchema } from './formo-root.schema';
+  FormoRootFromSchema,
+  FormoRootSchema,
+} from '../root/formo-root.schema';
+import { FormoSchemaCanBeParent } from '../shared/formo-parent.schema';
+import { IFormoFieldConfig } from './formo-field-config';
+import { FormoScalarOrArrayScalar } from '../shared/utils.interface';
+
+export type FormoFieldFromSchema<
+  T extends FormoFieldSchema<any, any, any, any>
+> = T extends FormoFieldSchema<infer A, infer B, infer C, infer D>
+  ? FormoField<A, FormoRootFromSchema<B>, C, any>
+  : never;
 
 export interface FormoFieldSchema<
-  TValue,
+  TValue extends FormoScalarOrArrayScalar,
   TRoot extends FormoRootSchema<any>,
   TKey extends string,
-  TParent extends FormoParentSchema
+  TParent extends FormoSchemaCanBeParent
 > {
   config: IFormoFieldConfig<
-    FormoField<
-      TValue,
-      FormoRootFromSchema<TRoot>,
-      TKey,
-      FormoParentFromSchema<TParent>
-    >
+    FormoField<TValue, FormoRootFromSchema<TRoot>, TKey, any>
   >;
   validation?: FormoField<
     TValue,
     FormoRootFromSchema<TRoot>,
     TKey,
-    FormoParentFromSchema<TParent>
+    any
   >['validation'];
   listeners?: FormoField<
     TValue,
     FormoRootFromSchema<TRoot>,
     TKey,
-    FormoParentFromSchema<TParent>
+    any
   >['listeners'];
 }
-
-export type FormoFieldFromSchema<
-  TValue,
-  TRoot extends FormoRootSchema<any>,
-  TKey extends string,
-  TParent extends FormoParentSchema
-> = FormoField<
-  TValue,
-  FormoRootFromSchema<TRoot>,
-  TKey,
-  FormoParentFromSchema<TParent>
->;
 
 export type FormoStringFieldSchema<
   TValue extends string,
   TRoot extends FormoRootSchema<any>,
   TKey extends string,
-  TParent extends FormoParentSchema
+  TParent extends FormoSchemaCanBeParent
 > = FormoFieldSchema<TValue, TRoot, TKey, TParent>;
 
 export type FormoBooleanFieldSchema<
   TValue extends boolean,
   TRoot extends FormoRootSchema<any>,
   TKey extends string,
-  TParent extends FormoParentSchema
+  TParent extends FormoSchemaCanBeParent
 > = FormoFieldSchema<TValue, TRoot, TKey, TParent>;
 
 export type FormoArrayFieldSchema<
   TValue extends Array<any>,
   TRoot extends FormoRootSchema<any>,
   TKey extends string,
-  TParent extends FormoParentSchema
+  TParent extends FormoSchemaCanBeParent
 > = FormoFieldSchema<TValue, TRoot, TKey, TParent>;
 
 export type FormoNumberFieldSchema<
   TValue extends number,
   TRoot extends FormoRootSchema<any>,
   TKey extends string,
-  TParent extends FormoParentSchema
+  TParent extends FormoSchemaCanBeParent
 > = FormoFieldSchema<TValue, TRoot, TKey, TParent>;
 
 export type FormoDateFieldSchema<
   TValue extends Date,
   TRoot extends FormoRootSchema<any>,
   TKey extends string,
-  TParent extends FormoParentSchema
+  TParent extends FormoSchemaCanBeParent
 > = FormoFieldSchema<TValue, TRoot, TKey, TParent>;

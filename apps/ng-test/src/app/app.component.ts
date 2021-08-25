@@ -1,32 +1,31 @@
 import { Component } from '@angular/core';
-import { FormoFieldTypes, formSchema } from '@poomosjs/ng-formo';
-import { RefDocument } from '@poomosjs/nest-utils/mongoose';
+import { createFormSchema, FormoFieldTypes } from '@poomosjs/ng-formo';
+import { RefDocument } from '@poomosjs/nest-utils';
 
 export interface FormationForm {
   name: number;
   isModule: boolean;
-  hgfjj: { kgl: string }[];
-  moduleIds?: string[];
+  hgfjj: { kgl?: string }[];
+  moduleIds: string[];
 }
+
 @Component({
   selector: 'poomosjs-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title: RefDocument = 'ng-test';
+  title = 'ng-test';
 
-  fd = formSchema<FormationForm>({
+  fd = createFormSchema<FormationForm>({
     children: {
       name: {
-        config: { type: FormoFieldTypes.Switch, value: '' },
+        config: { type: FormoFieldTypes.Switch, value: 1 },
       },
       isModule: {
-        config: { type: FormoFieldTypes.Switch, value: 'rf' },
+        config: { type: FormoFieldTypes.Switch, value: false },
       },
-      moduleIds: {
-        config: { type: FormoFieldTypes.Switch, value: 'rf' },
-      },
+      moduleIds: { config: { type: FormoFieldTypes.Switch, value: [] } },
       hgfjj: {
         model: {
           children: {

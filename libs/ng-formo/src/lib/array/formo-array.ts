@@ -1,22 +1,29 @@
 import { FormArray, ValidationErrors } from '@angular/forms';
+
+import {
+  FormoBaseWrapper,
+  FormoCanBeParent,
+  IFormoBaseChild,
+} from '../base/formo-base-wrapper';
 import {
   FormoArrayChildren,
   FormoArrayModel,
+  IFormoArrayArgs,
   IFormoArrayConfig,
   IFormoArrayListeners,
-} from '../interfaces/formo-array.interface';
-import { FormoRoot } from './formo-root';
-import { IFormoParent } from '../interfaces/formo-parent.interface';
-import { FormValidationError } from '../interfaces/validation/validation-error';
-import { IFormoArrayArgs } from '../interfaces/formo-array.interface';
-import { FormoBaseWrapper } from './formo-base-wrapper';
+} from './formo-array.type';
+import { FormValidationError } from '../base/validation-error';
+import { FormoRoot } from '../root/formo-root';
 
 export class FormoArray<
-  TValue extends Array<any>,
-  TRoot extends FormoRoot<any>,
-  TKey extends string,
-  TParent extends IFormoParent
-> extends FormoBaseWrapper {
+    TValue extends Array<any>,
+    TRoot extends FormoRoot<any>,
+    TKey extends string,
+    TParent extends FormoCanBeParent
+  >
+  extends FormoBaseWrapper
+  implements IFormoBaseChild<TRoot, TParent>
+{
   initialControl: FormArray;
   arrayIndex: number;
   root: TRoot;
@@ -85,12 +92,14 @@ export class FormoArray<
       this.addModel();
     }
     for (let i = 0; i < this.children.length; i++) {
+      const hgb = this.children[i];
+      const uyg = value[i];
       this.children[i].prepareForValue(value[i]);
     }
     this.control.setValue(value, options);
   }
 
-  prepareForValue(value: []) {
+  prepareForValue(value: TValue) {
     this.removeAllChildren();
     if (value && Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
@@ -115,6 +124,7 @@ export class FormoArray<
     clone.arrayIndex = this.children.length;
     this.children.push(clone);
     clone.onGenerateForm(this.root, this);
+    const v = value;
     if (value) {
       clone.control.setValue(value, options);
     }
@@ -139,6 +149,14 @@ export class FormoArray<
       return (this.children[key] as any).getChildByPath(futureKey, futurePath);
     }
     return this.children[key];
+  }
+
+  setRootAndParent(root: TRoot, parent: TParent) {
+    this.parent = parent;
+    this.root = root;
+    Object.keys(this.children).forEach((key) => {
+      this.children[key].setRootAndParent(root, this);
+    });
   }
 
   dispatchRootChanged() {

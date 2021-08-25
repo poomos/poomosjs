@@ -1,7 +1,8 @@
-import { FormoField } from '../models/formo-field';
-import { FormoRoot } from '../models/formo-root';
-import { IFormoParent } from './formo-parent.interface';
-import { IFormoFieldConfig } from './config/formo-field-config';
+import { FormoField } from './formo-field';
+import { FormoRoot } from '../root/formo-root';
+import { IFormoFieldConfig } from './formo-field-config';
+import { FormoCanBeParent } from '../base/formo-base-wrapper';
+import { FormoScalarOrArrayScalar } from '../shared/utils.interface';
 
 export enum FormoFieldTypes {
   Text = 'text',
@@ -44,42 +45,42 @@ export type FormoStringType<
   TValue extends string,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > = FormoField<TValue, TRoot, TKey, TParent>;
 
 export type FormoDateType<
   TValue extends Date,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > = FormoField<TValue, TRoot, TKey, TParent>;
 
 export type FormoArrayFieldType<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > = FormoField<TValue, TRoot, TKey, TParent>;
 
 export type FormoNumberType<
   TValue extends number,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > = FormoField<TValue, TRoot, TKey, TParent>;
 
 export type FormoBooleanType<
   TValue extends boolean,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > = FormoField<TValue, TRoot, TKey, TParent>;
 
 export interface IFormoFieldArgs<
-  TValue,
+  TValue extends FormoScalarOrArrayScalar,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent
+  TParent extends FormoCanBeParent
 > {
   key: TKey;
   config: IFormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>>;

@@ -6,24 +6,32 @@ import {
   Validators,
 } from '@angular/forms';
 import * as _ from 'lodash';
-import { IFormoFieldConfig } from '../interfaces/config/formo-field-config';
+
 import {
   FormoFieldTypes,
+  IFormoFieldArgs,
   IFormoFieldListeners,
   IFormoFieldValidation,
-} from '../interfaces/formo-field.interface';
-import { IFormoFieldArgs } from '../interfaces/formo-field.interface';
-import { FormoRoot } from './formo-root';
-import { IFormoParent } from '../interfaces/formo-parent.interface';
-import { FormValidationError } from '../interfaces/validation/validation-error';
-import { FormoBaseWrapper } from './formo-base-wrapper';
+} from './formo-field.type';
+import { FormoRoot } from '../root/formo-root';
+import {
+  FormoBaseWrapper,
+  FormoCanBeParent,
+  IFormoBaseChild,
+} from '../base/formo-base-wrapper';
+import { FormValidationError } from '../base/validation-error';
+import { IFormoFieldConfig } from './formo-field-config';
+import { FormoScalarOrArrayScalar } from '../shared/utils.interface';
 
 export class FormoField<
-  TValue,
-  TRoot extends FormoRoot<any>,
-  TKey extends string,
-  TParent extends IFormoParent
-> extends FormoBaseWrapper {
+    TValue extends FormoScalarOrArrayScalar,
+    TRoot extends FormoRoot<any>,
+    TKey extends string,
+    TParent extends FormoCanBeParent
+  >
+  extends FormoBaseWrapper
+  implements IFormoBaseChild<TRoot, TParent>
+{
   initialControl: FormControl;
   arrayIndex: number;
   absolutePath: string;
@@ -140,6 +148,10 @@ export class FormoField<
     }
   }
 
+  setRootAndParent(root: TRoot, parent: TParent) {
+    this.parent = parent;
+    this.root = root;
+  }
   prepareForValue(value) {}
 
   get value(): TValue {
@@ -193,7 +205,7 @@ export class FormoStringField<
   TValue extends string,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent,
+  TParent extends FormoCanBeParent,
   TRootType = TRoot['_type']
 > extends FormoField<TValue, TRoot, TKey, TParent> {}
 
@@ -201,7 +213,7 @@ export class FormoBooleanField<
   TValue extends boolean,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent,
+  TParent extends FormoCanBeParent,
   TRootType = TRoot['_type']
 > extends FormoField<TValue, TRoot, TKey, TParent> {}
 
@@ -209,7 +221,7 @@ export class FormoArrayField<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent,
+  TParent extends FormoCanBeParent,
   TRootType = TRoot['_type']
 > extends FormoField<TValue, TRoot, TKey, TParent> {}
 
@@ -217,7 +229,7 @@ export class FormoNumberField<
   TValue extends number,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent,
+  TParent extends FormoCanBeParent,
   TRootType = TRoot['_type']
 > extends FormoField<TValue, TRoot, TKey, TParent> {}
 
@@ -225,6 +237,6 @@ export class FormoDateField<
   TValue extends Date,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends IFormoParent,
+  TParent extends FormoCanBeParent,
   TRootType = TRoot['_type']
 > extends FormoField<TValue, TRoot, TKey, TParent> {}
