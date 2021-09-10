@@ -21,6 +21,230 @@
     }
   },
   "projects": {
+    "app-test": {
+      "root": "apps/app-test",
+      "sourceRoot": "apps/app-test/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/app-test",
+            "main": "apps/app-test/src/main.ts",
+            "tsConfig": "apps/app-test/tsconfig.app.json",
+            "assets": ["apps/app-test/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/app-test/src/environments/environment.ts",
+                  "with": "apps/app-test/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "app-test:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/app-test/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/app-test"],
+          "options": {
+            "jestConfig": "apps/app-test/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "cloud-build": {
+      "root": "libs/cloud-build",
+      "sourceRoot": "libs/cloud-build/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/cloud-build/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/cloud-build"],
+          "options": {
+            "jestConfig": "libs/cloud-build/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/cloud-build",
+            "tsConfig": "libs/cloud-build/tsconfig.lib.json",
+            "packageJson": "libs/cloud-build/package.json",
+            "main": "libs/cloud-build/src/index.ts",
+            "assets": ["libs/cloud-build/*.md"]
+          }
+        }
+      }
+    },
+    "core": {
+      "projectType": "library",
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
+      "prefix": "poomosjs",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/core/tsconfig.lib.json",
+            "project": "libs/core/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/core/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/core/src/**/*.ts",
+              "libs/core/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/core"],
+          "options": {
+            "jestConfig": "libs/core/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "nest-evento": {
+      "root": "libs/nest-evento",
+      "sourceRoot": "libs/nest-evento/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/nest-evento/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nest-evento"],
+          "options": {
+            "jestConfig": "libs/nest-evento/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "updateBuildableProjectDepsInPackageJson": false,
+            "outputPath": "dist/libs/nest-evento",
+            "tsConfig": "libs/nest-evento/tsconfig.lib.json",
+            "packageJson": "libs/nest-evento/package.json",
+            "main": "libs/nest-evento/src/index.ts",
+            "assets": ["libs/nest-evento/*.md"]
+          }
+        }
+      }
+    },
+    "nest-utils": {
+      "root": "libs/nest-utils",
+      "sourceRoot": "libs/nest-utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/nest-utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nest-utils"],
+          "options": {
+            "jestConfig": "libs/nest-utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/nest-utils",
+            "tsConfig": "libs/nest-utils/tsconfig.lib.json",
+            "packageJson": "libs/nest-utils/package.json",
+            "buildableProjectDepsInPackageJsonType": "peerDependencies",
+            "updateBuildableProjectDepsInPackageJson": false,
+            "main": "libs/nest-utils/src/index.ts",
+            "assets": ["libs/nest-utils/*.md"]
+          }
+        }
+      }
+    },
+    "ng-crudo": {
+      "projectType": "library",
+      "root": "libs/ng-crudo",
+      "sourceRoot": "libs/ng-crudo/src",
+      "prefix": "poomosjs",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/angular:package",
+          "options": {
+            "updateBuildableProjectDepsInPackageJson": false,
+            "tsConfig": "libs/ng-crudo/tsconfig.lib.json",
+            "project": "libs/ng-crudo/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/ng-crudo/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/ng-crudo/src/**/*.ts",
+              "libs/ng-crudo/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ng-crudo"],
+          "options": {
+            "jestConfig": "libs/ng-crudo/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "ng-formo": {
       "projectType": "library",
       "root": "libs/ng-formo",
@@ -172,22 +396,22 @@
         }
       }
     },
-    "nest-evento": {
-      "root": "libs/nest-evento",
-      "sourceRoot": "libs/nest-evento/src",
+    "peer-dependencies": {
+      "root": "libs/peer-dependencies",
+      "sourceRoot": "libs/peer-dependencies/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/nest-evento/**/*.ts"]
+            "lintFilePatterns": ["libs/peer-dependencies/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/nest-evento"],
+          "outputs": ["coverage/libs/peer-dependencies"],
           "options": {
-            "jestConfig": "libs/nest-evento/jest.config.js",
+            "jestConfig": "libs/peer-dependencies/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -195,171 +419,11 @@
           "executor": "@nrwl/node:package",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "updateBuildableProjectDepsInPackageJson": false,
-            "outputPath": "dist/libs/nest-evento",
-            "tsConfig": "libs/nest-evento/tsconfig.lib.json",
-            "packageJson": "libs/nest-evento/package.json",
-            "main": "libs/nest-evento/src/index.ts",
-            "assets": ["libs/nest-evento/*.md"]
-          }
-        }
-      }
-    },
-    "ng-crudo": {
-      "projectType": "library",
-      "root": "libs/ng-crudo",
-      "sourceRoot": "libs/ng-crudo/src",
-      "prefix": "poomosjs",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/angular:package",
-          "options": {
-            "updateBuildableProjectDepsInPackageJson": false,
-            "tsConfig": "libs/ng-crudo/tsconfig.lib.json",
-            "project": "libs/ng-crudo/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "libs/ng-crudo/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/ng-crudo/src/**/*.ts",
-              "libs/ng-crudo/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/ng-crudo"],
-          "options": {
-            "jestConfig": "libs/ng-crudo/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "core": {
-      "projectType": "library",
-      "root": "libs/core",
-      "sourceRoot": "libs/core/src",
-      "prefix": "poomosjs",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "libs/core/tsconfig.lib.json",
-            "project": "libs/core/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "libs/core/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/core/src/**/*.ts",
-              "libs/core/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/core"],
-          "options": {
-            "jestConfig": "libs/core/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "nest-utils": {
-      "root": "libs/nest-utils",
-      "sourceRoot": "libs/nest-utils/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/nest-utils/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/nest-utils"],
-          "options": {
-            "jestConfig": "libs/nest-utils/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "build": {
-          "executor": "@nrwl/node:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/nest-utils",
-            "tsConfig": "libs/nest-utils/tsconfig.lib.json",
-            "packageJson": "libs/nest-utils/package.json",
-            "buildableProjectDepsInPackageJsonType": "peerDependencies",
-            "updateBuildableProjectDepsInPackageJson": false,
-            "main": "libs/nest-utils/src/index.ts",
-            "assets": ["libs/nest-utils/*.md"]
-          }
-        }
-      }
-    },
-    "app-test": {
-      "root": "apps/app-test",
-      "sourceRoot": "apps/app-test/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/app-test",
-            "main": "apps/app-test/src/main.ts",
-            "tsConfig": "apps/app-test/tsconfig.app.json",
-            "assets": ["apps/app-test/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/app-test/src/environments/environment.ts",
-                  "with": "apps/app-test/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "app-test:build"
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/app-test/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/app-test"],
-          "options": {
-            "jestConfig": "apps/app-test/jest.config.js",
-            "passWithNoTests": true
+            "outputPath": "dist/libs/peer-dependencies",
+            "tsConfig": "libs/peer-dependencies/tsconfig.lib.json",
+            "packageJson": "libs/peer-dependencies/package.json",
+            "main": "libs/peer-dependencies/src/index.ts",
+            "assets": ["libs/peer-dependencies/*.md"]
           }
         }
       }

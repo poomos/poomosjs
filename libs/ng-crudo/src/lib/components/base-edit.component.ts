@@ -32,7 +32,7 @@ export abstract class CrudoEditComponent<R> implements OnDestroy, OnInit {
 
   ngOnInit() {}
 
-  abstract loadResource(id: string): Observable<R>;
+  abstract loadResource(id: string);
 
   abstract rebuildForm(): void;
 

@@ -6,10 +6,10 @@ import {
 import { MessageHandler } from '../handlers/message-handler';
 import { Inject } from '@angular/core';
 import {
-  forwardRef,
-  HttpService,
+  HttpCode,
+  HttpException,
+  HttpStatus,
   Injectable,
-  ServiceUnavailableException,
 } from '@nestjs/common';
 import * as PubSub from '@google-cloud/pubsub';
 import { dateReviver } from '../utils/date.util';
@@ -19,6 +19,7 @@ import { QueryModelType } from '../interfaces/core/queries/query.interface';
 import { CommandModelType } from '../interfaces/core/commands/command.interface';
 import { IRequestOptions } from '../interfaces/core/config.interface';
 import { InternalServerErrorException } from '@nestjs/common/exceptions/internal-server-error.exception';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class HttpRequestClient implements IRequestResponseClient {
@@ -45,7 +46,28 @@ export class HttpRequestClient implements IRequestResponseClient {
         `Endpoint not found for ${event.type}`
       );
     }
-    return this.httpService.post(endpoint, event).toPromise();
+
+    try {
+      const response = await this.httpService.post(endpoint, event).toPromise();
+      response.status;
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        throw new HttpException(error.response.data, error.response.status);
+      } else if (error.request) {
+        throw new HttpException(
+          `Connection error The service ${
+            options?.endpointName || event.target
+          } is not available right now`,
+          HttpStatus.SERVICE_UNAVAILABLE
+        );
+      } else {
+        console.log('Error', error.message);
+      }
+    }
   }
 
   toMessage(payload: any) {
@@ -59,7 +81,7 @@ export class HttpRequestClient implements IRequestResponseClient {
     return Buffer.from(payload);
   }
 
-  fromMessage(payload: Buffer): object | string | null | number {
+  fromMessage(payload: Buffer): Record<string, any> | string | null | number {
     if (isNil(payload)) {
       return null;
     }

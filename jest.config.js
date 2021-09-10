@@ -8,5 +8,7 @@ module.exports = {
     '<rootDir>/libs/nest-utils',
     '<rootDir>/apps/app-test',
     '<rootDir>/libs/pub-sub-emulator',
+    '<rootDir>/libs/cloud-build',
+    '<rootDir>/libs/peer-dependencies',
   ],
 };

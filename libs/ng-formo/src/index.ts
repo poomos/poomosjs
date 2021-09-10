@@ -21,3 +21,4 @@ export * from './lib/group/formo-group.schema';
 export * from './lib/shared/formo-parent.schema';
 export * from './lib/root/formo-root.schema';
 export * from './lib/base/schema';
+export * from './lib/shared/utils.interface';

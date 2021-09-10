@@ -1,16 +1,19 @@
 import * as mongoose from 'mongoose';
 import {
+  AnyKeys,
+  AnyObject,
   Document,
   DocumentDefinition,
   FilterQuery,
   Model,
+  QueryOptions,
   UpdateQuery,
 } from 'mongoose';
 import { IConnectionPager, ICursorArgs, ICursorInfo } from '@poomosjs/core';
 
 export abstract class MongooseRepository<
   TDoc extends Document,
-  TFilter extends object = any,
+  TFilter extends Record<string, any>,
   TModel extends Model<TDoc> = Model<TDoc>
 > {
   constructor(protected Model: TModel) {}
@@ -52,23 +55,22 @@ export abstract class MongooseRepository<
     return this.Model.findOne(this.transformFilter(filter)).exec();
   }
 
-  async createOne(create: DocumentDefinition<TDoc>): Promise<TDoc> {
+  async createOne(create: AnyKeys<TDoc> & AnyObject): Promise<TDoc> {
     const created = new this.Model(create);
     return created.save();
   }
 
   async updateOne(
-    id: string,
     update: UpdateQuery<TDoc>,
-    filter: TFilter
+    filter: TFilter,
+    options: QueryOptions = {}
   ): Promise<TDoc> {
     return await this.Model.findOneAndUpdate(
       {
         ...this.transformFilter(filter),
-        _id: id,
       },
       update,
-      { new: true }
+      { new: true, ...options }
     ).exec();
   }
 
@@ -173,5 +175,5 @@ export abstract class MongooseRepository<
 
   abstract transformFilter(filter: TFilter): FilterQuery<TDoc>;
 
-  abstract transformSort(sort: string): string | object;
+  abstract transformSort(sort: string): string | Record<string, any>;
 }

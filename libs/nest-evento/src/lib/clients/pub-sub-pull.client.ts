@@ -22,10 +22,9 @@ export class PubSubPullClient implements IPublishSubscribeClient {
 
   constructor(
     @Inject('MessageHandler')
-    public messageHandler: MessageHandler
-  ) /*   @Inject('EVENTO_CLIENT')
+    public messageHandler: MessageHandler /*   @Inject('EVENTO_CLIENT')
     public options: IEventoConfig*/
-  {
+  ) {
     /*    this.topicName = options.publishSubscribe.topicName;
     this.projectId = options.publishSubscribe.projectId;
     this.subscriptionName = options.publishSubscribe.subscriptionName;*/
@@ -73,7 +72,7 @@ export class PubSubPullClient implements IPublishSubscribeClient {
     return Buffer.from(payload);
   }
 
-  fromMessage(payload: Buffer): object | string | null | number {
+  fromMessage(payload: Buffer): Record<string, any> | string | null | number {
     if (isNil(payload)) {
       return null;
     }

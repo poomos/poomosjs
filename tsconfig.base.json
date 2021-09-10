@@ -15,11 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@poomosjs/ng-formo": ["libs/ng-formo/src/index.ts"],
-      "@poomosjs/nest-evento": ["libs/nest-evento/src/index.ts"],
-      "@poomosjs/ng-crudo": ["libs/ng-crudo/src/index.ts"],
+      "@poomosjs/cloud-build": ["libs/cloud-build/src/index.ts"],
       "@poomosjs/core": ["libs/core/src/index.ts"],
+      "@poomosjs/nest-evento": ["libs/nest-evento/src/index.ts"],
       "@poomosjs/nest-utils": ["libs/nest-utils/src/index.ts"],
+      "@poomosjs/ng-crudo": ["libs/ng-crudo/src/index.ts"],
+      "@poomosjs/ng-formo": ["libs/ng-formo/src/index.ts"],
+      "@poomosjs/peer-deps": ["libs/peer-dependencies/src/index.ts"],
       "@poomosjs/pub-sub-emulator": ["libs/pub-sub-emulator/src/index.ts"]
     }
   },

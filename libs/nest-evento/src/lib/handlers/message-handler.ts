@@ -1,7 +1,7 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { isBaseEvent } from '../utils/kafka-event.utils';
+import { isBaseEvent } from '../utils/event.utils';
 import { CommandBus } from '../bus/command-bus';
 import { QueryBus } from '../bus/query-bus';
 import { EventBus } from '../bus/event-bus';
@@ -25,7 +25,7 @@ export class MessageHandler {
   ) {}
 
   async onRequest(value: any) {
-    console.log(value);
+    console.log('message handler on request', value);
     if (isBaseEvent(value)) {
       const handlerObj = this.findHandler(value);
       if (handlerObj && handlerObj.handlerType === 'query') {
@@ -34,8 +34,7 @@ export class MessageHandler {
         const errors = await validate(event);
         if (errors.length > 0) {
         } else {
-          const result = await handlerObj.handler.handle(event);
-          return result;
+          return handlerObj.handler.handle(event);
         }
       }
       if (handlerObj && handlerObj.handlerType === 'command') {
@@ -44,11 +43,11 @@ export class MessageHandler {
         const errors = await validate(event);
         if (errors.length > 0) {
         } else {
-          const result = await handlerObj.handler.handle(event);
-          return result;
+          return handlerObj.handler.handle(event);
         }
       }
     }
+    console.log('jioijkj');
     throw new HttpException('Not found handler', 500);
   }
 

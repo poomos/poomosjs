@@ -22,6 +22,24 @@
     }
   },
   "projects": {
+    "app-test": {
+      "tags": []
+    },
+    "cloud-build": {
+      "tags": []
+    },
+    "core": {
+      "tags": []
+    },
+    "nest-evento": {
+      "tags": []
+    },
+    "nest-utils": {
+      "tags": []
+    },
+    "ng-crudo": {
+      "tags": []
+    },
     "ng-formo": {
       "tags": []
     },
@@ -32,19 +50,7 @@
       "tags": [],
       "implicitDependencies": ["ng-test"]
     },
-    "nest-evento": {
-      "tags": []
-    },
-    "ng-crudo": {
-      "tags": []
-    },
-    "core": {
-      "tags": []
-    },
-    "nest-utils": {
-      "tags": []
-    },
-    "app-test": {
+    "peer-dependencies": {
       "tags": []
     },
     "pub-sub-emulator": {

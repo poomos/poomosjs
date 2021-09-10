@@ -19,6 +19,10 @@ export abstract class FormoBaseWrapper {
     return this.control.valid;
   }
 
+  get invalid(): boolean {
+    return this.control.invalid;
+  }
+
   get pristine(): boolean {
     return this.control.pristine;
   }

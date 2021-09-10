@@ -1,8 +1,8 @@
 import { isObject } from '@nestjs/common/utils/shared.utils';
 
-export const isBaseEvent = (kafkaValue: any) => {
-  if (isObject(kafkaValue)) {
-    if (kafkaValue['type']) {
+export const isBaseEvent = (eventValue: any) => {
+  if (isObject(eventValue)) {
+    if (eventValue['type']) {
       return true;
     }
   }

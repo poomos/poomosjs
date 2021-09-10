@@ -60,7 +60,7 @@ export class PubSubPushClient implements IPublishSubscribeClient {
     return Buffer.from(payload);
   }
 
-  fromMessage(payload: Buffer): object | string | null | number {
+  fromMessage(payload: Buffer): Record<string, any> | string | null | number {
     if (isNil(payload)) {
       return null;
     }

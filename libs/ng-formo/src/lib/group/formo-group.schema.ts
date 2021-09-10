@@ -8,8 +8,21 @@ import { FormoFieldSchema } from '../field/formo-field.schema';
 import { FormoArraySchema } from '../array/formo-array.schema';
 import {
   FormoObject,
+  FormoRequiredType,
   FormoScalarOrArrayScalar,
 } from '../shared/utils.interface';
+import { FormSchema } from '../base/schema';
+
+export const createFormGroupSchema = <
+  TValue extends FormoObject,
+  TRoot extends FormoRootSchema<any>,
+  TKey extends string,
+  TParent extends FormoSchemaCanBeParent
+>(
+  schema: FormoGroupSchema<FormoRequiredType<TValue>, TRoot, TKey, TParent>
+): FormoGroupSchema<FormoRequiredType<TValue>, TRoot, TKey, TParent> => {
+  return schema;
+};
 
 export type FormoGroupFromSchema<
   T extends FormoGroupSchema<any, any, any, any>
