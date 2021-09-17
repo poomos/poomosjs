@@ -1,0 +1,11 @@
+{
+  "name": "@poomosjs/cloud-build",
+  "version": "0.0.2",
+  "bin": {
+    "cloud-build": "./src/bin/command.js"
+  },
+  "dependencies": {
+    "yargs": "^17.1.*",
+    "@google-cloud/cloudbuild": "^2.6.*"
+  }
+}

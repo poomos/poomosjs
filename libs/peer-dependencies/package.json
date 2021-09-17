@@ -1,0 +1,10 @@
+{
+  "name": "@poomosjs/peer-deps",
+  "version": "0.0.5",
+  "bin": {
+    "add-peer-deps": "./src/bin/generate.js"
+  },
+  "dependencies": {
+    "yargs": "^17.1.1"
+  }
+}
