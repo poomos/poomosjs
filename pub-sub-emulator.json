@@ -1,0 +1,17 @@
+{
+  "projectId":"ghfo",
+  "topics": ["jllmk", "fgbhdn"],
+  "pull": [
+    {
+      "topic": "fgbhdn",
+      "id": "gbfc"
+    }
+  ],
+  "push": [
+    {
+      "endpoint": "http://fgbhdn",
+      "topic": "fgbhdn",
+      "id": "gbdfc"
+    }
+  ]
+}

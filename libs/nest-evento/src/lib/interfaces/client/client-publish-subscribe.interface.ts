@@ -4,7 +4,6 @@ import { CommandModelType } from '../core/commands/command.interface';
 import { EventModelType } from '../core/events/event.interface';
 
 export interface IPublishSubscribeClient {
-  initSubscription(): Promise<any>;
   publish(event: EventModelType | CommandModelType): Promise<any>;
 }
 

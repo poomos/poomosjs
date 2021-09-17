@@ -1,7 +1,6 @@
 import {
   DynamicModule,
   Global,
-  HttpModule,
   Inject,
   Module,
   OnApplicationBootstrap,
@@ -28,6 +27,7 @@ import { HttpRequestClient } from './clients/http-request.client';
 import { ConfigModule, ConfigService, registerAs } from '@nestjs/config';
 import { EventoConfigService } from './services/config.service';
 import { PubSubHandlerController } from './controllers/pub-sub-handler.controller';
+import { HttpModule } from '@nestjs/axios';
 
 const Services = [
   EventoConfigService,
@@ -38,6 +38,8 @@ const Services = [
   MessageHandler,
   MessageSender,
   HttpRequestClient,
+  PubSubPushClient,
+  PubSubPullClient,
 ];
 
 function getPublishSubscribeClient(options: IEventoConfig): Provider<any> {
@@ -105,18 +107,15 @@ export class NestEventoModule implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    const {
-      events,
-      queries,
-      commands,
-    } = this.explorerService.exploreHandlers();
+    const { events, queries, commands } =
+      this.explorerService.exploreHandlers();
     this.eventsBus.register(events);
     this.commandsBus.register(commands);
     this.queryBus.register(queries);
     // @TODO Await
-    if (this.publishSubscribeClient) {
+    /*    if (this.publishSubscribeClient) {
       await this.publishSubscribeClient.initSubscription();
-    }
+    }*/
   }
 
   public static forRoot(options: IEventoConfig): DynamicModule {
@@ -140,7 +139,7 @@ export class NestEventoModule implements OnApplicationBootstrap {
           : []),
       ],
       providers: [...Services, ...createProviders(options)],
-      exports: [...createProviders(options), ...Services],
+      exports: [...Services, ...createProviders(options)],
     };
   }
 

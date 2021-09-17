@@ -2,39 +2,79 @@
 
 import * as yargs from 'yargs';
 import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import * as validateSchema from 'yaml-schema-validator';
 import { startServer } from '../lib/start-server';
 import { EmulatorConfig } from '../lib/interfaces';
 import { initInstance } from '../lib/init-instance';
 import { initSubject } from '../lib/init-subject';
 import { initSubscribers } from '../lib/init-subscribers';
+import Ajv, { JSONSchemaType } from 'ajv';
+
+const ajv = new Ajv();
+
+const schema = {
+  type: 'object',
+  properties: {
+    projectId: { type: 'string' },
+    serverPort: { type: 'integer', nullable: true },
+    topics: {
+      type: 'array',
+      items: {
+        type: 'string',
+        minLength: 3,
+        maxLength: 255,
+      },
+    },
+    pull: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          topic: { type: 'string', minLength: 3, maxLength: 255 },
+          id: { type: 'string', minLength: 3, maxLength: 255 },
+        },
+        required: ['topic', 'id'],
+      },
+    },
+    push: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          topic: { type: 'string', minLength: 3, maxLength: 255 },
+          id: { type: 'string', minLength: 3, maxLength: 255 },
+          endpoint: { type: 'string', minLength: 3, maxLength: 255 },
+        },
+        required: ['topic', 'id', 'endpoint'],
+      },
+    },
+  },
+  required: ['projectId', 'topics'],
+  additionalProperties: false,
+};
+
+const validate = ajv.compile(schema);
 
 const options = yargs.usage('Usage: --config <name>').option('config', {
   alias: 'configFile',
   describe: 'Your name',
   type: 'string',
   requiresArg: true,
-  demandOption: false,
 }).argv;
-
-const greeting = `Hello, ${options.configFile}!`;
-console.log(process.cwd());
-console.log(greeting);
 
 try {
   const fileContents = fs.readFileSync(
-    `${options.configFile || 'pub-sub-emulator.yaml'}`,
+    `${options.configFile || 'pub-sub-emulator.json'}`,
     'utf8'
   );
-  const data = yaml.load(fileContents);
+  const data = JSON.parse(fileContents);
 
   console.log(data);
-  const validation = valideSchema(data);
-  if (validation.length === 0) {
-    start(data);
+  const validation = validate(data);
+  if (validation) {
+    start(data as EmulatorConfig);
   } else {
     console.error('Invalid Schema');
+    console.log(validate.errors);
   }
 } catch (e) {
   console.log(e);
@@ -46,33 +86,6 @@ async function start(config: EmulatorConfig) {
 
   const subjects = await initSubject(instance, config);
   const subscribers = initSubscribers(subjects, config);
-}
-
-function valideSchema(config: EmulatorConfig) {
-  return validateSchema(config, {
-    schema: {
-      projectId: { type: String, required: true },
-      serverPort: { type: Number, required: false },
-      topics: [{ type: String, required: true, length: { min: 3, max: 255 } }],
-      pull: [
-        {
-          topic: { type: String, required: true, length: { min: 3, max: 255 } },
-          id: { type: String, required: true, length: { min: 3, max: 255 } },
-        },
-      ],
-      push: [
-        {
-          topic: { type: String, required: true, length: { min: 3, max: 255 } },
-          id: { type: String, required: true, length: { min: 3, max: 255 } },
-          endpoint: {
-            type: String,
-            required: true,
-            length: { min: 3, max: 255 },
-          },
-        },
-      ],
-    },
-  });
 }
 
 //do something when app is closing

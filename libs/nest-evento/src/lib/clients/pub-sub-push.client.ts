@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common/utils/shared.utils';
 import { EventEmitter } from 'events';
 import { MessageHandler } from '../handlers/message-handler';
-import { Inject } from '@angular/core';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as PubSub from '@google-cloud/pubsub';
 import { dateReviver } from '../utils/date.util';
 import { IPublishSubscribeClient } from '../interfaces/client/client-publish-subscribe.interface';
+import { EventoConfigService } from '../services/config.service';
 
 export enum PubSubAttributes {
   CORRELATION_ID = 'correlationId',
@@ -23,30 +23,36 @@ export enum PubSubAttributes {
 
 @Injectable()
 export class PubSubPushClient implements IPublishSubscribeClient {
-  protected client: PubSub.PubSub;
-  protected topicName: string;
-  protected projectId: string;
-  protected subscriptionName: string;
+  protected _client: PubSub.PubSub;
   protected responseEmitter: EventEmitter;
 
   constructor(
-    @Inject('MessageHandler')
-    public messageHandler: MessageHandler /*    @Inject('EVENTO_CLIENT')
-    public options: IEventoConfig*/
-  ) {
-    /*    this.topicName = options.publishSubscribe.topicName;
-    this.projectId = options.publishSubscribe.projectId;
-    this.subscriptionName = options.publishSubscribe.subscriptionName;*/
-  }
+    public config: EventoConfigService,
+    public messageHandler: MessageHandler
+  ) {}
 
-  async initSubscription() {}
+  get client(): PubSub.PubSub {
+    if (this._client) {
+      return this._client;
+    } else {
+      this._client = new PubSub.PubSub({
+        projectId: this.config.publishSubscribe.projectId,
+        ...(this.config.publishSubscribe.useEmulator
+          ? { apiEndpoint: 'localhost', port: '8085' }
+          : {}),
+      });
+      return this._client;
+    }
+  }
 
   public async handleMessage(message: PubSub.Message) {
     await this.messageHandler.onSubscription(this.fromMessage(message.data));
   }
 
   public async publish(message: any): Promise<any> {
-    await this.client.topic(this.topicName).publish(this.toMessage(message));
+    await this.client
+      .topic(this.config.publishSubscribe.topicName)
+      .publish(this.toMessage(message));
   }
 
   toMessage(payload: any) {

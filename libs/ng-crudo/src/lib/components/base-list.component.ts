@@ -9,6 +9,7 @@ import {
   CrudoListItemAction,
 } from '../interfaces/list.interface';
 import { SelectionModel } from '@angular/cdk/collections';
+import { defaultCursorInfo, ICursorInfo } from '@poomosjs/core';
 
 interface ListComponentOptions {
   dialogMode?: boolean;
@@ -20,15 +21,17 @@ interface ListComponentOptions {
   template: '',
 })
 export abstract class CrudoListComponent<R>
-  implements OnDestroy, OnInit, CrudoTableProperties<R> {
+  implements OnDestroy, OnInit, CrudoTableProperties<R>
+{
   options: ListComponentOptions = {
     dialogMode: false,
     routeIdParam: 'id',
     routeNewParams: ['create', 'new'],
   };
   subscriptions: Subscription = new Subscription();
-  protected dataSource$: Observable<R[]>;
+  dataSource$: Observable<R[]>;
   resourcesId: string | number = null;
+  cursorInfo: ICursorInfo = defaultCursorInfo;
 
   selectionEnabled = true;
   identifierPath: string;

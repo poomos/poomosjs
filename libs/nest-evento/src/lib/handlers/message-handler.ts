@@ -16,11 +16,8 @@ import { EventModelType } from '../interfaces/core/events/event.interface';
 @Injectable()
 export class MessageHandler {
   constructor(
-    @Inject('CommandBus')
     public readonly commandBus: CommandBus,
-    @Inject('QueryBus')
     protected readonly queryBus: QueryBus,
-    @Inject('EventBus')
     protected readonly eventBus: EventBus
   ) {}
 

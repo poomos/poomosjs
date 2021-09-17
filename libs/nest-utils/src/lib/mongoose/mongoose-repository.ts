@@ -122,8 +122,8 @@ export abstract class MongooseRepository<
     const count = await cloneQuery.count();
 
     const idQuery = {
-      ...(before ? { $lt: mongoose.Types.ObjectId(before) } : {}),
-      ...(after ? { $gt: mongoose.Types.ObjectId(after) } : {}),
+      ...(before ? { $lt: new mongoose.Types.ObjectId(before) } : {}),
+      ...(after ? { $gt: new mongoose.Types.ObjectId(after) } : {}),
     };
 
     const paginateFilter = {
@@ -157,16 +157,16 @@ export abstract class MongooseRepository<
     }
 
     if (paginateQueryResult.length > 0) {
-      cursorInfo.startCursor = paginateQueryResult[0].relayId;
+      cursorInfo.startCursor = paginateQueryResult[0]._id.toString();
       cursorInfo.endCursor =
-        paginateQueryResult[paginateQueryResult.length - 1].relayId;
+        paginateQueryResult[paginateQueryResult.length - 1]._id.toString();
     }
 
     return {
       totalCount: count,
       nodes: paginateQueryResult.map((edge) => edge),
       edges: paginateQueryResult.map((edge) => ({
-        cursor: edge.relayId,
+        cursor: edge._id.toString(),
         node: edge,
       })),
       cursorInfo,

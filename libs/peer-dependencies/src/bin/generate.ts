@@ -3,8 +3,17 @@
 
 import * as fs from 'fs';
 import { execSync } from 'child_process';
+import * as yargs from 'yargs';
 
-const rawdata = fs.readFileSync('package.json').toString();
+const options = yargs.usage('Usage: --path <path>').option('path', {
+  alias: 'path',
+  describe: 'Path',
+  type: 'string',
+  requiresArg: true,
+  demandOption: true,
+}).argv;
+
+const rawdata = fs.readFileSync(options.path).toString();
 const PackageJson = JSON.parse(rawdata);
 let peerDependenciesForDependencies = {};
 
@@ -27,5 +36,5 @@ PackageJson.dependencies = {
   ...PackageJson.dependencies,
 };
 const data = JSON.stringify(PackageJson);
-fs.writeFileSync('package.json', data);
+fs.writeFileSync(options.path, data);
 console.log('package.json updated');

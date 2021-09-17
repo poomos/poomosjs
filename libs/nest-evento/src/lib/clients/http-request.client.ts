@@ -4,11 +4,11 @@ import {
   isUndefined,
 } from '@nestjs/common/utils/shared.utils';
 import { MessageHandler } from '../handlers/message-handler';
-import { Inject } from '@angular/core';
 import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
 } from '@nestjs/common';
 import * as PubSub from '@google-cloud/pubsub';
@@ -25,7 +25,6 @@ import { HttpService } from '@nestjs/axios';
 export class HttpRequestClient implements IRequestResponseClient {
   constructor(
     public config: EventoConfigService,
-    @Inject('MessageHandler')
     public messageHandler: MessageHandler,
     private httpService: HttpService
   ) {

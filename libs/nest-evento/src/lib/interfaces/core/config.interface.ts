@@ -40,6 +40,7 @@ export interface IEventoPubSubPullConfig extends IEventoPublishSubscribeConfig {
   topicName: string;
   projectId: string;
   subscriptionName: string;
+  useEmulator?: boolean;
 }
 
 export interface IEventoPubSubPushConfig extends IEventoPublishSubscribeConfig {
@@ -47,4 +48,5 @@ export interface IEventoPubSubPushConfig extends IEventoPublishSubscribeConfig {
   topicName: string;
   projectId: string;
   subscriptionName?: string;
+  useEmulator?: boolean;
 }

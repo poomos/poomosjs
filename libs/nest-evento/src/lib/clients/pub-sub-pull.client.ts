@@ -5,12 +5,11 @@ import {
 } from '@nestjs/common/utils/shared.utils';
 import { EventEmitter } from 'events';
 import { MessageHandler } from '../handlers/message-handler';
-import { Inject } from '@angular/core';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as PubSub from '@google-cloud/pubsub';
 import { dateReviver } from '../utils/date.util';
 import { IPublishSubscribeClient } from '../interfaces/client/client-publish-subscribe.interface';
-import { IEventoConfig } from '../interfaces/core/config.interface';
+import { EventoConfigService } from '../services/config.service';
 
 @Injectable()
 export class PubSubPullClient implements IPublishSubscribeClient {
@@ -21,14 +20,9 @@ export class PubSubPullClient implements IPublishSubscribeClient {
   protected responseEmitter: EventEmitter;
 
   constructor(
-    @Inject('MessageHandler')
-    public messageHandler: MessageHandler /*   @Inject('EVENTO_CLIENT')
-    public options: IEventoConfig*/
-  ) {
-    /*    this.topicName = options.publishSubscribe.topicName;
-    this.projectId = options.publishSubscribe.projectId;
-    this.subscriptionName = options.publishSubscribe.subscriptionName;*/
-  }
+    public config: EventoConfigService,
+    public messageHandler: MessageHandler
+  ) {}
 
   async initSubscription() {
     this.client = new (PubSub as any).PubSub({ projectId: this.projectId });

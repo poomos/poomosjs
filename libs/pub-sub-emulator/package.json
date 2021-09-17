@@ -1,7 +1,10 @@
 {
   "name": "@poomosjs/pub-sub-emulator",
-  "version": "0.0.21",
+  "version": "0.0.26",
   "bin": {
-    "add-peer-deps": "./src/bin/generate.js"
+    "pub-sub-emulator": "./src/bin/emulator.js"
+  },
+  "dependencies": {
+    "ajv": "^8.6.3"
   }
 }
