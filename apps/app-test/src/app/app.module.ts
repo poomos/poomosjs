@@ -7,6 +7,7 @@ import {
   PublishSubscribeProviders,
   RequestResponseProviders,
 } from '@poomosjs/nest-evento';
+import { NestPubSubEmulatorModule } from '@poomosjs/nest-pubsub';
 
 @Module({
   imports: [
@@ -28,6 +29,14 @@ import {
           ],
         },
       };
+    }),
+    NestPubSubEmulatorModule.register({
+      projectId: 'fb',
+      topics: {
+        duyfgi: {
+          pushs: [{ id: 'uygih', endpoint: 'https://jhfguk' }],
+        },
+      },
     }),
   ],
   controllers: [AppController],

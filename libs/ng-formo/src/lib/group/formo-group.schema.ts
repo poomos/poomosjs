@@ -7,77 +7,45 @@ import { FormoGroup } from './formo-group';
 import { FormoFieldSchema } from '../field/formo-field.schema';
 import { FormoArraySchema } from '../array/formo-array.schema';
 import {
-  FormoObject,
   FormoRequiredType,
   FormoScalarOrArrayScalar,
 } from '../shared/utils.interface';
-import { FormSchema } from '../base/schema';
+import { IFormoGroupConfig } from './formo-group.interface';
 
 export const createFormGroupSchema = <
-  TValue extends FormoObject,
+  TValue extends Record<string, any>,
   TRoot extends FormoRootSchema<any>,
   TKey extends string,
   TParent extends FormoSchemaCanBeParent
 >(
-  schema: FormoGroupSchema<FormoRequiredType<TValue>, TRoot, TKey, TParent>
-): FormoGroupSchema<FormoRequiredType<TValue>, TRoot, TKey, TParent> => {
+  schema: FormoGroupSchema<FormoRequiredType<TValue>, TKey, TRoot>
+): FormoGroupSchema<FormoRequiredType<TValue>, TKey, TRoot> => {
   return schema;
 };
 
-export type FormoGroupFromSchema<
-  T extends FormoGroupSchema<any, any, any, any>
-> = T extends FormoGroupSchema<infer A, infer B, infer C, infer D>
-  ? FormoGroup<A, FormoRootFromSchema<B>, C, any>
-  : never;
+export type FormoGroupFromSchema<T extends FormoGroupSchema<any, any, any>> =
+  T extends FormoGroupSchema<infer A, infer B, infer C>
+    ? FormoGroup<A, B, FormoRootFromSchema<C>, any>
+    : never;
 
 export interface FormoGroupSchema<
-  TValue extends FormoObject,
-  TRoot extends FormoRootSchema<any>,
+  TValue extends Record<string, any>,
   TKey extends string,
-  TParent extends FormoSchemaCanBeParent
-> {
-  children: FormGroupChildSchema<TValue, TRoot, TKey, TParent>;
-  config?: FormoGroup<TValue, FormoRootFromSchema<TRoot>, TKey, any>['config'];
-  validation?: FormoGroup<
-    TValue,
-    FormoRootFromSchema<TRoot>,
-    TKey,
-    any
-  >['validation'];
-  listeners?: FormoGroup<
-    TValue,
-    FormoRootFromSchema<TRoot>,
-    TKey,
-    any
-  >['listeners'];
+  TRoot extends FormoRootSchema<any>
+> extends IFormoGroupConfig<TValue, FormoRootFromSchema<TRoot>> {
+  children: FormGroupChildSchema<TValue, TRoot, TKey>;
 }
 
 export type FormGroupChildSchema<
-  TValue extends FormoObject,
+  TValue extends Record<string, any>,
   TRoot extends FormoRootSchema<any>,
-  TKey extends string,
-  TParent extends FormoSchemaCanBeParent
+  TKey extends string
 > = {
   [K in keyof TValue & string]: TValue[K] extends FormoScalarOrArrayScalar
-    ? FormoFieldSchema<
-        TValue[K],
-        TRoot,
-        K extends string ? K : string,
-        FormoGroupSchema<TValue, TRoot, TKey, TParent>
-      >
+    ? FormoFieldSchema<TValue[K], K extends string ? K : string, TRoot>
     : TValue[K] extends Array<any>
-    ? FormoArraySchema<
-        TValue[K],
-        TRoot,
-        K extends string ? K : string,
-        FormoGroupSchema<TValue, TRoot, TKey, TParent>
-      >
-    : TValue[K] extends FormoObject
-    ? FormoGroupSchema<
-        TValue[K],
-        TRoot,
-        K extends string ? K : string,
-        FormoGroupSchema<TValue, TRoot, TKey, TParent>
-      >
+    ? FormoArraySchema<TValue[K], K extends string ? K : string, TRoot>
+    : TValue[K] extends Record<string, any>
+    ? FormoGroupSchema<TValue[K], K extends string ? K : string, TRoot>
     : never;
 };

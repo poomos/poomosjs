@@ -14,14 +14,14 @@
     }
   ],
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
+/*    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true*/
   },
   "angularCompilerOptions": {
-    "strictInjectionParameters": true,
+/*    "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true*/
   }
 }

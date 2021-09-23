@@ -62,6 +62,18 @@ export abstract class CrudoListComponent<R>
   addField(field: CrudoTableField) {
     this.fields.push(field);
   }
+
+  addQuickAction(action: CrudoListBulkAction<R>) {
+    this.quickActions.push(action);
+  }
+
+  addItemAction(action: CrudoListItemAction<R>) {
+    this.itemActions.push(action);
+  }
+
+  addBulkAction(action: CrudoListBulkAction<R>) {
+    this.bulkActions.push(action);
+  }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

@@ -4,13 +4,16 @@ import {
   FormGroup,
   ValidationErrors,
 } from '@angular/forms';
-import { FormoRoot } from '../root/formo-root';
-import { FormoGroup } from '../group/formo-group';
-import { FormoArray } from '../array/formo-array';
-import { FormoObject } from '../shared/utils.interface';
+import { IFormoBaseWrapper } from './formo-base.interface';
 
-export abstract class FormoBaseWrapper {
-  abstract get control(): FormControl | FormGroup | FormArray;
+export abstract class FormoBaseWrapper<T extends 'array' | 'group' | 'control'>
+  implements IFormoBaseWrapper<T>
+{
+  abstract control: T extends 'array'
+    ? FormArray
+    : T extends 'group'
+    ? FormGroup
+    : FormControl;
   get dirty(): boolean {
     return this.control.dirty;
   }
@@ -43,15 +46,3 @@ export abstract class FormoBaseWrapper {
     return this.control.touched;
   }
 }
-
-export interface IFormoBaseChild<
-  TRoot extends FormoRoot<any>,
-  TParent extends FormoCanBeParent
-> {
-  setRootAndParent(root: TRoot, parent: TParent);
-}
-
-export type FormoCanBeParent =
-  | FormoGroup<FormoObject, FormoRoot<any>, string, FormoCanBeParent>
-  | FormoRoot<FormoObject>
-  | FormoArray<Array<any>, FormoRoot<any>, string, FormoCanBeParent>;

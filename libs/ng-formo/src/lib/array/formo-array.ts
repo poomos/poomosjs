@@ -1,53 +1,76 @@
 import { FormArray, ValidationErrors } from '@angular/forms';
 
-import {
-  FormoBaseWrapper,
-  FormoCanBeParent,
-  IFormoBaseChild,
-} from '../base/formo-base-wrapper';
-import {
-  FormoArrayChildren,
-  FormoArrayModel,
-  IFormoArrayArgs,
-  IFormoArrayConfig,
-  IFormoArrayListeners,
-} from './formo-array.type';
+import { FormoBaseWrapper } from '../base/formo-base-wrapper';
 import { FormValidationError } from '../base/validation-error';
-import { FormoRoot } from '../root/formo-root';
+import { IFormoArray, IFormoArrayConfig } from './formo-array.interface';
+import { IFormoRoot } from '../root/formo-root.interface';
+import {
+  FormoRootFromSchema,
+  FormoRootSchema,
+} from '../root/formo-root.schema';
+import { FormoGroupSchema } from '../group/formo-group.schema';
+import { FormoGroup } from '../group/formo-group';
+import { IFormoGroup } from '../group/formo-group.interface';
+import { FormoArraySchema } from './formo-array.schema';
 
 export class FormoArray<
     TValue extends Array<any>,
-    TRoot extends FormoRoot<any>,
     TKey extends string,
-    TParent extends FormoCanBeParent
+    TRoot extends IFormoRoot<any>,
+    TParent extends IFormoRoot<any> | IFormoGroup<any, any, any, any>
   >
-  extends FormoBaseWrapper
-  implements IFormoBaseChild<TRoot, TParent>
+  extends FormoBaseWrapper<'array'>
+  implements IFormoArray<TValue, TKey, TRoot, TParent>
 {
   initialControl: FormArray;
   arrayIndex: number;
   root: TRoot;
   parent: TParent;
   key: TKey;
-  model: FormoArrayModel<TValue, TRoot, TKey, TParent>;
-  children: FormoArrayChildren<TValue, TRoot, TKey, TParent>;
-  config: IFormoArrayConfig<TRoot, FormoArray<TValue, TRoot, TKey, TParent>>;
-  listeners: IFormoArrayListeners<
-    TRoot,
-    FormoArray<TValue, TRoot, TKey, TParent>,
-    TParent
-  >;
+  model;
+  children;
+  formValueChanged?: (root: TRoot, current: this) => void;
+  onCustomEvent?: (event: string, value: unknown, current: this) => void;
 
-  constructor(args: IFormoArrayArgs<TValue, TRoot, TKey, TParent>) {
+  constructor(
+    args: { key: TKey } & {
+      model: IFormoArray<TValue, TKey, TRoot, TParent>['model'];
+    } & IFormoArrayConfig<TValue, TRoot>
+  ) {
     super();
     this.key = args.key;
     this.model = args.model;
     this.children = [];
-    this.setConfig(args.config || {});
-    this.listeners = args.listeners || {};
+    this.updateConfig(args);
     this.initialControl = new FormArray([]);
   }
 
+  static toSchema<
+    TValue extends Array<any>,
+    TKey extends string,
+    TRoot extends FormoRootSchema<any>
+  >(
+    key: TKey,
+    schema: FormoArraySchema<TValue, TKey, TRoot>
+  ): IFormoArray<TValue, TKey, FormoRootFromSchema<TRoot>, any> {
+    let model: IFormoArray<
+      TValue,
+      TKey,
+      FormoRootFromSchema<TRoot>,
+      any
+    >['model'] = null;
+
+    if (schema.model.children) {
+      model = () => FormoGroup.toSchema(key, schema.model);
+    } else {
+      // model = () => FormoField.toSchema(key, schema.children[key] as FormoFieldSchema<any, any, any>)
+    }
+
+    return new FormoArray<TValue, TKey, FormoRootFromSchema<TRoot>, any>({
+      key,
+      model,
+    });
+  }
   get control(): FormArray {
     if (this.parent) {
       if (this.parent.control instanceof FormArray) {
@@ -92,8 +115,6 @@ export class FormoArray<
       this.addModel();
     }
     for (let i = 0; i < this.children.length; i++) {
-      const hgb = this.children[i];
-      const uyg = value[i];
       this.children[i].prepareForValue(value[i]);
     }
     this.control.setValue(value, options);
@@ -124,7 +145,6 @@ export class FormoArray<
     clone.arrayIndex = this.children.length;
     this.children.push(clone);
     clone.onGenerateForm(this.root, this);
-    const v = value;
     if (value) {
       clone.control.setValue(value, options);
     }
@@ -160,8 +180,8 @@ export class FormoArray<
   }
 
   dispatchRootChanged() {
-    if (this.listeners.formValueChanged) {
-      this.listeners.formValueChanged(this.root, this);
+    if (this.formValueChanged) {
+      this.formValueChanged(this.root, this);
     }
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].dispatchRootChanged();
@@ -172,10 +192,10 @@ export class FormoArray<
     return this.control.value;
   }
 
-  setConfig(config: FormoArray<TValue, TRoot, TKey, TParent>['config']) {
-    this.config = {
-      visible: config.visible || true,
-    };
+  updateConfig(config: IFormoArrayConfig<TValue, TRoot>) {
+    for (const [key, value] of Object.entries(config)) {
+      this[key] = value;
+    }
   }
 
   validationErrors(): FormValidationError[] {

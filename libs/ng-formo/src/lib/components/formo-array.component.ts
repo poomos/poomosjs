@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-@Component({ template: '' })
 export abstract class BaseFormoArrayComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() path: string;

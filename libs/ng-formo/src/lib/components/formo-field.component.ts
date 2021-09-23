@@ -6,11 +6,10 @@ import {
   OnInit,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FormoField } from '../field/formo-field';
 import { FormoFieldTypes } from '../field/formo-field.type';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
-@Component({ template: '' })
 export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   @Input() field: FormoField<any, any, any, any>;
@@ -18,8 +17,8 @@ export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
   types = FormoFieldTypes;
   @Input() dynamicLabel: string;
   @HostBinding('class') get panelClass() {
-    let panelClass = this.field.config.panelClass;
-    if (!this.field.config.visible) {
+    let panelClass = this.field.panelClass;
+    if (!this.field.visible) {
       panelClass = panelClass + ' ' + 'd-none';
     }
     return panelClass;
@@ -51,20 +50,20 @@ export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
     if (this.dynamicLabel) {
       return this.dynamicLabel;
     } else {
-      return this.field.config.label;
+      return this.field.label;
     }
   }
 
   get placeholder() {
-    return this.field.config.placeholder;
+    return this.field.placeholder;
   }
 
   get description() {
-    return this.field.config.description;
+    return this.field.description;
   }
 
   get help() {
-    return this.field.config.help;
+    return this.field.help;
   }
   hasError(validationType: string): boolean {
     if (this.getErrors() === {}) {
@@ -86,15 +85,15 @@ export abstract class BaseFormoFieldComponent implements OnInit, AfterViewInit {
   }
 
   getChoiceLabel(value: any): any {
-    if (this.field.config.choiceLabel) {
-      return _.get(value, this.field.config.choiceLabel);
+    if (this.field.choiceLabel) {
+      return _.get(value, this.field.choiceLabel);
     }
     return value;
   }
 
   getChoiceValue(value: any): any {
-    if (this.field.config.choiceValue) {
-      return _.get(value, this.field.config.choiceValue);
+    if (this.field.choiceValue) {
+      return _.get(value, this.field.choiceValue);
     }
     return value;
   }

@@ -7,30 +7,32 @@ import {
 } from '@angular/forms';
 import * as _ from 'lodash';
 
-import {
-  FormoFieldTypes,
-  IFormoFieldArgs,
-  IFormoFieldListeners,
-  IFormoFieldValidation,
-} from './formo-field.type';
+import { FormoFieldTypes } from './formo-field.type';
 import { FormoRoot } from '../root/formo-root';
-import {
-  FormoBaseWrapper,
-  FormoCanBeParent,
-  IFormoBaseChild,
-} from '../base/formo-base-wrapper';
+import { FormoBaseWrapper } from '../base/formo-base-wrapper';
 import { FormValidationError } from '../base/validation-error';
-import { IFormoFieldConfig } from './formo-field-config';
+import { IFormoField, IFormoFieldConfig } from './formo-field.interface';
 import { FormoScalarOrArrayScalar } from '../shared/utils.interface';
+import { IFormoRoot } from '../root/formo-root.interface';
+import {
+  FormoRootFromSchema,
+  FormoRootSchema,
+} from '../root/formo-root.schema';
+import { FormoFieldSchema } from './formo-field.schema';
+import { IFormoArray } from '../array/formo-array.interface';
+import { IFormoGroup } from '../group/formo-group.interface';
 
 export class FormoField<
     TValue extends FormoScalarOrArrayScalar,
-    TRoot extends FormoRoot<any>,
     TKey extends string,
-    TParent extends FormoCanBeParent
+    TRoot extends IFormoRoot<any>,
+    TParent extends
+      | IFormoArray<any, any, any, any>
+      | IFormoRoot<any>
+      | IFormoGroup<any, any, any, any>
   >
-  extends FormoBaseWrapper
-  implements IFormoBaseChild<TRoot, TParent>
+  extends FormoBaseWrapper<'control'>
+  implements IFormoField<TValue, TKey, TRoot, TParent>
 {
   initialControl: FormControl;
   arrayIndex: number;
@@ -38,68 +40,63 @@ export class FormoField<
   root: TRoot;
   parent: TParent;
   key: TKey;
-  config: IFormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>> = {
-    type: FormoFieldTypes.Text,
-    panelClass: 'col-md-6',
-    wrapperClass: '',
-    isDisabled: false,
-    multiple: false,
-    value: null,
-    label: '',
-    help: '',
-    hideLabel: false,
-    compareKeyPath: null,
-    placeholder: '',
-    icon: null,
-    choices: [],
-    choiceLabel: null,
-    choiceValue: null,
-    description: '',
-    labelPath: null,
-    visible: true,
-  };
-  listeners: IFormoFieldListeners<
-    TRoot,
-    FormoField<TValue, TRoot, TKey, TParent>,
-    TParent
-  >;
-  validation: IFormoFieldValidation<
-    TRoot,
-    FormoField<TValue, TRoot, TKey, TParent>
-  >;
+  type = FormoFieldTypes.Text;
+  panelClass = 'col-md-6';
+  wrapperClass = '';
+  isDisabled = false;
+  multiple = false;
+  defaultValue = null;
+  label = '';
+  help = '';
+  hideLabel = false;
+  compareKeyPath = null;
+  placeholder = '';
+  icon = null;
+  choices = [];
+  choiceLabel = null;
+  choiceValue = null;
+  description = '';
+  labelPath = null;
+  visible = true;
+  isEmail: boolean = undefined;
+  isRequired?: boolean = undefined;
+  min?: number;
+  max?: number;
+  formValueChanged?: (root: TRoot, current: this) => void;
+  onCustomEvent?: (event: string, value: unknown, current: this) => void;
 
-  constructor(args: IFormoFieldArgs<TValue, TRoot, TKey, TParent>) {
+  constructor(args: { key: TKey } & IFormoFieldConfig<TValue, TRoot>) {
     super();
     this.key = args.key;
-    this.updateConfig(args.config);
-    this.listeners = args.listeners || {};
-    this.setValidation(args.validation || {});
+    this.updateConfig(args);
+
     this.initialControl = new FormControl({
-      value: this.config.value,
-      disabled: this.config.isDisabled,
+      value: this.defaultValue,
+      disabled: this.isDisabled,
     });
   }
 
-  setValidation(
-    validation: FormoField<TValue, TRoot, TKey, TParent>['validation']
-  ) {
-    this.validation = {};
-    this.validation.isRequired =
-      validation.isRequired === undefined ? false : validation.isRequired;
-    this.validation.isEmail =
-      validation.isEmail === undefined ? false : validation.isEmail;
-    this.validation.min = validation.min || 0;
-    this.validation.max = validation.max || 100000;
+  static toSchema<
+    TValue extends FormoScalarOrArrayScalar,
+    TKey extends string,
+    TRoot extends FormoRootSchema<any>
+  >(
+    key: TKey,
+    schema: FormoFieldSchema<TValue, TKey, TRoot>
+  ): IFormoField<TValue, TKey, FormoRootFromSchema<TRoot>, any> {
+    return new FormoField<TValue, TKey, FormoRootFromSchema<TRoot>, any>({
+      key,
+      ...schema,
+    });
   }
 
-  updateConfig(
-    config: IFormoFieldConfig<FormoField<TValue, TRoot, TKey, TParent>>
-  ) {
-    this.config = {
-      ...this.config,
-      ...config,
-    };
+  updateConfig(config: IFormoFieldConfig<TValue, TRoot>) {
+    for (const [key, value] of Object.entries(config)) {
+      this[key] = value;
+    }
+    this.applyValidation();
   }
+
   get control(): FormControl {
     if (this.parent) {
       if (this.parent.control instanceof FormArray) {
@@ -121,10 +118,10 @@ export class FormoField<
   applyValidation() {
     if (this.control) {
       const validators: ValidatorFn[] = [];
-      if (this.validation.isRequired) {
+      if (this.isRequired) {
         validators.push(Validators.required);
       }
-      if (this.validation.isEmail) {
+      if (this.isEmail) {
         validators.push(Validators.email);
       }
       this.control.setValidators(validators);
@@ -132,8 +129,8 @@ export class FormoField<
   }
 
   getLabel(value: any): any {
-    if (this.config.labelPath) {
-      return _.get(value, this.config.labelPath);
+    if (this.labelPath) {
+      return _.get(value, this.labelPath);
     }
     return value;
   }
@@ -195,8 +192,8 @@ export class FormoField<
   }
 
   dispatchRootChanged() {
-    if (this.listeners.formValueChanged) {
-      this.listeners.formValueChanged(this.root, this);
+    if (this.formValueChanged) {
+      this.formValueChanged(this.root, this);
     }
   }
 }
@@ -205,38 +202,53 @@ export class FormoStringField<
   TValue extends string,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends FormoCanBeParent,
+  TParent extends
+    | IFormoArray<any, any, any, any>
+    | IFormoRoot<any>
+    | IFormoGroup<any, any, any, any>,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent> {}
+> extends FormoField<TValue, TKey, TRoot, TParent> {}
 
 export class FormoBooleanField<
   TValue extends boolean,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends FormoCanBeParent,
+  TParent extends
+    | IFormoArray<any, any, any, any>
+    | IFormoRoot<any>
+    | IFormoGroup<any, any, any, any>,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent> {}
+> extends FormoField<TValue, TKey, TRoot, TParent> {}
 
 export class FormoArrayField<
   TValue extends Array<any>,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends FormoCanBeParent,
+  TParent extends
+    | IFormoArray<any, any, any, any>
+    | IFormoRoot<any>
+    | IFormoGroup<any, any, any, any>,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent> {}
+> extends FormoField<TValue, TKey, TRoot, TParent> {}
 
 export class FormoNumberField<
   TValue extends number,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends FormoCanBeParent,
+  TParent extends
+    | IFormoArray<any, any, any, any>
+    | IFormoRoot<any>
+    | IFormoGroup<any, any, any, any>,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent> {}
+> extends FormoField<TValue, TKey, TRoot, TParent> {}
 
 export class FormoDateField<
   TValue extends Date,
   TRoot extends FormoRoot<any>,
   TKey extends string,
-  TParent extends FormoCanBeParent,
+  TParent extends
+    | IFormoArray<any, any, any, any>
+    | IFormoRoot<any>
+    | IFormoGroup<any, any, any, any>,
   TRootType = TRoot['_type']
-> extends FormoField<TValue, TRoot, TKey, TParent> {}
+> extends FormoField<TValue, TKey, TRoot, TParent> {}

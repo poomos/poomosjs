@@ -1,6 +1,6 @@
 {
   "name": "@poomosjs/ng-formo",
-  "version": "0.0.47",
+  "version": "0.0.51",
   "homepage": "https://github.com/poomos/poomosjs",
   "peerDependencies": {
     "@angular/common": "^12.0.0",

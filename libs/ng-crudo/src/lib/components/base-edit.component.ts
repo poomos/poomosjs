@@ -7,34 +7,30 @@ interface CrudoEditComponentOptions {
   dialogMode?: boolean;
   routeIdParam?: string;
   routeNewParams: string[];
-  loadResource?: boolean;
+  loadIdFromRoute?: boolean;
 }
 
 @Component({
   template: '',
 })
 export abstract class CrudoEditComponent<R> implements OnDestroy, OnInit {
-  form: FormoRoot<any>;
   options: CrudoEditComponentOptions = {
-    dialogMode: false,
     routeIdParam: 'id',
     routeNewParams: ['create', 'new'],
-    loadResource: true,
+    loadIdFromRoute: true,
   };
   subscriptions: Subscription = new Subscription();
   resource: R;
   resourcesId: string | number = null;
   isNew = true;
 
-  constructor(protected route: ActivatedRoute, protected router: Router) {
-    this.loadIdFromRoute();
+  constructor(protected route: ActivatedRoute, protected router: Router) {}
+
+  ngOnInit() {
+    if (this.options.loadIdFromRoute) {
+      this.loadIdFromRoute();
+    }
   }
-
-  ngOnInit() {}
-
-  abstract loadResource(id: string);
-
-  abstract rebuildForm(): void;
 
   loadIdFromRoute() {
     this.subscriptions.add(
@@ -44,22 +40,14 @@ export abstract class CrudoEditComponent<R> implements OnDestroy, OnInit {
           this.isNew = true;
         } else {
           this.isNew = false;
-          this.subscriptions.add(
-            this.loadResource(id).subscribe((data) => {
-              this.resource = data;
-            })
-          );
         }
         this.resourcesId = id;
+        this.routeLoaded();
       })
     );
   }
 
-  switchToEditRoute(id: string) {
-    this.router
-      .navigateByUrl(this.router.url.replace(this.resourcesId as string, id))
-      .then();
-  }
+  routeLoaded() {}
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();

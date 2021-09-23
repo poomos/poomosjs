@@ -3,28 +3,64 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { FormoBaseWrapper } from '../base/formo-base-wrapper';
-import {
-  FormRootChild,
-  IFormoRootArgs,
-  IFormoRootListeners,
-} from './formo-root.type';
 import { FormValidationError } from '../base/validation-error';
-import { FormoObject } from '../shared/utils.interface';
+import { IFormoRoot } from './formo-root.interface';
+import { FormoRootSchema } from './formo-root.schema';
+import { FormoArraySchema } from '../array/formo-array.schema';
+import { FormoGroupSchema } from '../group/formo-group.schema';
+import { FormoFieldSchema } from '../field/formo-field.schema';
+import { FormoArray } from '../array/formo-array';
+import { FormoField } from '../field/formo-field';
+import { FormoGroup } from '../group/formo-group';
 
-export class FormoRoot<TValue extends FormoObject> extends FormoBaseWrapper {
+export class FormoRoot<TValue extends Record<string, any>>
+  extends FormoBaseWrapper<'group'>
+  implements IFormoRoot<TValue>
+{
   subscriptions: Subscription = new Subscription();
+  /*  readonly _keys: keyof this['children'];
+  readonly _paths: this['_keys'] extends string
+    ? `${this['children'][this['_keys']]['_paths']}` | this['_keys']
+    : never;*/
   readonly _type: TValue;
   form: FormGroup;
-  children: FormRootChild<TValue>;
-  listeners: IFormoRootListeners<TValue>;
+  children: IFormoRoot<TValue>['children'];
+  formValueChanged?: (root: IFormoRoot<TValue>) => void;
 
-  constructor(args: IFormoRootArgs<TValue>) {
+  constructor(args: { children: FormoRoot<TValue>['children'] }) {
     super();
     this.children = args.children;
-    this.listeners = args.listeners || {};
     this.form = new FormGroup({});
   }
+  static toSchema<TValue extends Record<string, any>>(
+    schema: FormoRootSchema<TValue>
+  ): FormoRoot<TValue> {
+    const children: Record<string, any> = {};
+    for (const [key, value] of Object.entries(schema.children)) {
+      if (schema.children[key]['model']) {
+        children[key] = FormoArray.toSchema(
+          key,
+          schema.children[key] as FormoArraySchema<any, any, any>
+        );
+      } else {
+        if (schema.children[key]['children']) {
+          children[key] = FormoGroup.toSchema(
+            key,
+            schema.children[key] as FormoGroupSchema<any, any, any>
+          );
+        } else {
+          children[key] = FormoField.toSchema(
+            key,
+            schema.children[key] as FormoFieldSchema<any, any, any>
+          );
+        }
+      }
+    }
 
+    return new FormoRoot<TValue>({
+      children,
+    });
+  }
   createForm() {
     Object.keys(this.children).forEach((key) => {
       this.children[key].onGenerateForm(this, this);
@@ -34,11 +70,12 @@ export class FormoRoot<TValue extends FormoObject> extends FormoBaseWrapper {
         .pipe(startWith({}))
         .subscribe(() => this.dispatchRootChanged())
     );
+    return this;
   }
 
   dispatchRootChanged() {
-    if (this.listeners.formValueChanged) {
-      this.listeners.formValueChanged(this);
+    if (this.formValueChanged) {
+      this.formValueChanged(this);
     }
     Object.keys(this.children).forEach((key) => {
       this.children[key].dispatchRootChanged();
@@ -58,9 +95,6 @@ export class FormoRoot<TValue extends FormoObject> extends FormoBaseWrapper {
     return;
   }
 
-  path(t: this, name: string) {
-    return t[name];
-  }
   patchValue(value: Partial<TValue>) {
     this.prepareForValue(value);
     this.form.patchValue(value);

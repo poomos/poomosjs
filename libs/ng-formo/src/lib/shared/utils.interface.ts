@@ -9,7 +9,7 @@ export type FormoScalarOrArrayScalar =
   | boolean[]
   | number[]
   | Date[];
-export type FormoObject = Record<string, any>;
+
 export type FormoRequiredType<T> = {
   [K in keyof T]: Required<FormoRequiredType<T[K]>>;
 };

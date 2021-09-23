@@ -1,15 +1,14 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { FormoGroup } from '../group/formo-group';
-import { FormoGroupTypes } from '../group/formo-group-config';
+import { FormoGroupTypes } from '../group/formo-group.interface';
 
-@Component({ template: '' })
 export abstract class BaseFormoGroupComponent implements OnInit {
   @Input() group: FormoGroup<any, any, any, any>;
   types = FormoGroupTypes;
 
   @HostBinding('class') get panelClass() {
-    let panelClass = this.group.config.panelClass;
-    if (!this.group.config.visible) {
+    let panelClass = this.group.panelClass;
+    if (!this.group.visible) {
       panelClass = panelClass + ' ' + 'd-none';
     }
     return panelClass;
@@ -25,7 +24,7 @@ export abstract class BaseFormoGroupComponent implements OnInit {
   }
 
   get label() {
-    return this.group.config.label;
+    return this.group.label;
   }
 
   get valid() {

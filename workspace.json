@@ -173,6 +173,39 @@
         }
       }
     },
+    "nest-pubsub": {
+      "root": "libs/nest-pubsub",
+      "sourceRoot": "libs/nest-pubsub/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/nest-pubsub/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/nest-pubsub"],
+          "options": {
+            "jestConfig": "libs/nest-pubsub/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/nest-pubsub",
+            "tsConfig": "libs/nest-pubsub/tsconfig.lib.json",
+            "packageJson": "libs/nest-pubsub/package.json",
+            "main": "libs/nest-pubsub/src/index.ts",
+            "assets": ["libs/nest-pubsub/*.md"]
+          }
+        }
+      }
+    },
     "nest-utils": {
       "root": "libs/nest-utils",
       "sourceRoot": "libs/nest-utils/src",
@@ -424,38 +457,6 @@
             "packageJson": "libs/peer-dependencies/package.json",
             "main": "libs/peer-dependencies/src/index.ts",
             "assets": ["libs/peer-dependencies/*.md"]
-          }
-        }
-      }
-    },
-    "pub-sub-emulator": {
-      "root": "libs/pub-sub-emulator",
-      "sourceRoot": "libs/pub-sub-emulator/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/pub-sub-emulator",
-            "tsConfig": "libs/pub-sub-emulator/tsconfig.lib.json",
-            "packageJson": "libs/pub-sub-emulator/package.json",
-            "main": "libs/pub-sub-emulator/src/index.ts",
-            "assets": ["libs/pub-sub-emulator/*.md"]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/pub-sub-emulator/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/pub-sub-emulator"],
-          "options": {
-            "jestConfig": "libs/pub-sub-emulator/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

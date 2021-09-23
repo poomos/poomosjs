@@ -34,6 +34,9 @@
     "nest-evento": {
       "tags": []
     },
+    "nest-pubsub": {
+      "tags": []
+    },
     "nest-utils": {
       "tags": []
     },
@@ -51,9 +54,6 @@
       "implicitDependencies": ["ng-test"]
     },
     "peer-dependencies": {
-      "tags": []
-    },
-    "pub-sub-emulator": {
       "tags": []
     }
   }

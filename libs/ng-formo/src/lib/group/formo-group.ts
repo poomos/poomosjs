@@ -1,58 +1,102 @@
-import { FormArray, FormGroup, ValidationErrors } from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import * as _ from 'lodash';
-
-import { FormoRoot } from '../root/formo-root';
-import {
-  FormoBaseWrapper,
-  FormoCanBeParent,
-  IFormoBaseChild,
-} from '../base/formo-base-wrapper';
-import { FormGroupChild, IFormoGroupArgs } from './formo-group.type';
+import { FormoBaseWrapper } from '../base/formo-base-wrapper';
 import { FormValidationError } from '../base/validation-error';
+import { IFormoGroup, IFormoGroupConfig } from './formo-group.interface';
+import { FormoGroupSchema } from './formo-group.schema';
 import {
-  FormoGroupConfig,
-  IFormoGroupConfig,
-  IFormoGroupListeners,
-  IFormoGroupValidation,
-} from './formo-group-config';
-import { FormoObject } from '../shared/utils.interface';
+  FormoRootFromSchema,
+  FormoRootSchema,
+} from '../root/formo-root.schema';
+import { FormoArraySchema } from '../array/formo-array.schema';
+import { FormoFieldSchema } from '../field/formo-field.schema';
+import { FormoField } from '../field/formo-field';
+import { FormoArray } from '../array/formo-array';
+import { IFormoRoot } from '../root/formo-root.interface';
+import { FormoRoot } from '../root/formo-root';
 
 export class FormoGroup<
-    TValue extends FormoObject,
-    TRoot extends FormoRoot<any>,
+    TValue extends Record<string, any>,
     TKey extends string,
-    TParent extends FormoCanBeParent
+    TRoot extends IFormoRoot<any>,
+    TParent extends
+      | FormoRoot<any>
+      | FormoArray<any, any, any, any>
+      | FormoGroup<any, any, any, any>
   >
-  extends FormoBaseWrapper
-  implements IFormoBaseChild<TRoot, TParent>
+  extends FormoBaseWrapper<'group'>
+  implements IFormoGroup<TValue, TKey, TRoot, TParent>
 {
+  label?: string;
   initialControl: FormGroup;
   arrayIndex: number;
   root: TRoot;
   parent: TParent;
   key: TKey;
-  children: FormGroupChild<TValue, TRoot, TKey, TParent>;
-  config: IFormoGroupConfig<TRoot, FormoGroup<TValue, TRoot, TKey, TParent>>;
-  validation: IFormoGroupValidation<
-    TRoot,
-    FormoGroup<TValue, TRoot, TKey, TParent>
-  >;
-  listeners: IFormoGroupListeners<
-    TRoot,
-    FormoGroup<TValue, TRoot, TKey, TParent>,
-    TParent
-  >;
-
-  constructor(args: IFormoGroupArgs<TValue, TRoot, TKey, TParent>) {
+  children;
+  isRequired?: boolean = false;
+  panelClass = 'col-md-6';
+  visible = true;
+  formValueChanged?: (root: TRoot, current: this) => void;
+  onCustomEvent?: (event: string, value: unknown, current: this) => void;
+  constructor(
+    args: {
+      key: TKey;
+      children: IFormoGroup<TValue, TKey, TRoot, any>;
+    } & IFormoGroupConfig<TValue, TRoot>
+  ) {
     super();
     this.key = args.key;
     this.children = args.children;
-    this.setConfig(args.config || {});
-    this.listeners = args.listeners || {};
-    this.setValidation(args.validation || {});
+    this.updateConfig(args);
     this.initialControl = new FormGroup({});
   }
 
+  static toSchema<
+    TValue extends Record<string, any>,
+    TKey extends string,
+    TRoot extends FormoRootSchema<any>
+  >(
+    key: TKey,
+    schema: FormoGroupSchema<TValue, TKey, TRoot>
+  ): IFormoGroup<TValue, TKey, FormoRootFromSchema<TRoot>, any> {
+    const children: IFormoGroup<
+      TValue,
+      TKey,
+      FormoRootFromSchema<TRoot>,
+      any
+    > = {} as IFormoGroup<TValue, TKey, FormoRootFromSchema<TRoot>, any>;
+    for (const [key, value] of Object.entries(schema.children)) {
+      if (schema.children[key]['model']) {
+        children[key] = FormoArray.toSchema(
+          key,
+          schema.children[key] as FormoArraySchema<any, any, any>
+        );
+      } else {
+        if (schema.children[key]['children']) {
+          children[key] = FormoGroup.toSchema(
+            key,
+            schema.children[key] as FormoGroupSchema<any, any, any>
+          );
+        } else {
+          children[key] = FormoField.toSchema(
+            key,
+            schema.children[key] as FormoFieldSchema<any, any, any>
+          );
+        }
+      }
+    }
+    return new FormoGroup<TValue, TKey, FormoRootFromSchema<TRoot>, any>({
+      key,
+      children,
+    });
+  }
   prepareForValue(value) {
     Object.keys(this.children).forEach((key) => {
       this.children[key].prepareForValue(_.get(value, key));
@@ -107,16 +151,21 @@ export class FormoGroup<
     });
   }
 
-  setConfig(config: FormoGroup<TValue, TRoot, TKey, TParent>['config']) {
-    this.config = new FormoGroupConfig(config);
+  updateConfig(config: IFormoGroupConfig<TValue, TRoot>) {
+    for (const [key, value] of Object.entries(config)) {
+      this[key] = value;
+    }
+    this.applyValidation();
   }
 
-  setValidation(
-    validation: FormoGroup<TValue, TRoot, TKey, TParent>['validation']
-  ) {
-    this.validation = {
-      isRequired: validation.isRequired || false,
-    };
+  applyValidation() {
+    if (this.control) {
+      const validators: ValidatorFn[] = [];
+      if (this.isRequired) {
+        validators.push(Validators.required);
+      }
+      this.control.setValidators(validators);
+    }
   }
 
   get value(): TValue {
@@ -162,8 +211,8 @@ export class FormoGroup<
   }
 
   dispatchRootChanged() {
-    if (this.listeners.formValueChanged) {
-      this.listeners.formValueChanged(this.root, this);
+    if (this.formValueChanged) {
+      this.formValueChanged(this.root, this);
     }
     Object.keys(this.children).forEach((key) => {
       this.children[key].dispatchRootChanged();

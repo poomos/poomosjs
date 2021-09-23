@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { createFormSchema, FormoFieldTypes } from '@poomosjs/ng-formo';
-import { RefDocument } from '@poomosjs/nest-utils';
 
 export interface FormationForm {
   name: number;
   isModule: boolean;
+  sub: { kgl?: string };
   hgfjj: { kgl?: string }[];
   moduleIds: string[];
 }
@@ -19,18 +19,31 @@ export class AppComponent {
 
   fd = createFormSchema<FormationForm>({
     children: {
+      gui: 'luh',
       name: {
-        config: { type: FormoFieldTypes.Switch, value: 1 },
+        type: FormoFieldTypes.Switch,
+        defaultValue: 1,
+      },
+      gui: 'luh',
+      sub: {
+        children: {
+          kgl: {
+            type: FormoFieldTypes.Checkbox,
+            defaultValue: 'r',
+          },
+        },
       },
       isModule: {
-        config: { type: FormoFieldTypes.Switch, value: false },
+        type: FormoFieldTypes.Switch,
+        defaultValue: false,
       },
-      moduleIds: { config: { type: FormoFieldTypes.Switch, value: [] } },
+      moduleIds: { type: FormoFieldTypes.Switch, defaultValue: [] },
       hgfjj: {
         model: {
           children: {
             kgl: {
-              config: { type: FormoFieldTypes.Switch, value: 'rf' },
+              type: FormoFieldTypes.Switch,
+              defaultValue: 'rf',
             },
           },
         },
@@ -39,6 +52,6 @@ export class AppComponent {
   }).generateForm();
 
   constructor() {
-    console.log(this.fd.children);
+    console.log(this.fd);
   }
 }
